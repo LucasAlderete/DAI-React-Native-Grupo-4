@@ -2,6 +2,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import ClasesList from '../components/ClasesList';
 import ClaseDetail from '../components/ClaseDetail';
+import Profile from '../components/Profile';
 
 const Stack = createStackNavigator();
 
@@ -35,6 +36,17 @@ const RootNavigator = () => {
         component={ClaseDetail}
         options={{ 
           title: 'Detalle',
+          headerStyle: {
+            backgroundColor: '#FFFFFF',
+          },
+          headerTintColor: '#000000',
+        }}
+      />
+      <Stack.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          title: 'Perfil',
           headerStyle: {
             backgroundColor: '#FFFFFF',
           },
