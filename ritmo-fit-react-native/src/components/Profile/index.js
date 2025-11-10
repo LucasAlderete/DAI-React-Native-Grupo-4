@@ -153,7 +153,7 @@ const Profile = ({ navigation, token }) => {
         disabled={updating}
       >
         <Text style={styles.updateButtonText}>
-          {updating ? 'Actualizando...' : 'Actualizar Perfil'}
+          {updating ? 'Actualizando...' : 'Actualizar'}
         </Text>
       </TouchableOpacity>
 
