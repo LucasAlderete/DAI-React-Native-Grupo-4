@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://10.0.2.2:8080/api';
+const API_URL = "http://192.168.0.93:8080/api";
 
 const apiClient = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: API_URL,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
@@ -11,13 +11,8 @@ const apiClient = axios.create({
 });
 
 apiClient.interceptors.request.use(
-  (config) => {
-    // Aca se puede agregar el token si es necesario
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (config) => config,
+  (error) => Promise.reject(error)
 );
 
 apiClient.interceptors.response.use(
@@ -28,7 +23,6 @@ apiClient.interceptors.response.use(
   }
 );
 
-// curl --location 'http://localhost:8080/api/clases?page=0&size=10'
 export const getClases = async () => {
   try {
     const response = await apiClient.get('/clases');
@@ -38,7 +32,6 @@ export const getClases = async () => {
   }
 };
 
-// curl --location 'http://localhost:8080/api/clases/1'
 export const getClaseById = async (id) => {
   try {
     const response = await apiClient.get(`/clases/${id}`);
