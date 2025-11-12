@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from 'react-native';
-import { getClases } from '../../services/clasesService';
+import { getClases } from '../../services/ClasesService';
 import '../../config/calendarConfig';
 import FilterSelector from './FilterSelector';
 import ModalSelector from './ModalSelector';

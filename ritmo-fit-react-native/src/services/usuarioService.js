@@ -1,4 +1,4 @@
-import apiClient from './clasesService';
+import apiClient from './ClasesService';
 import * as ImagePicker from 'expo-image-picker';
 
 // GET /usuario/perfil
