@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import { getClaseById } from '../../services/clasesService';
+import { getClaseById } from '../../services/ClasesService';
 
 const ClaseDetail = ({ route, navigation }) => {
   const { claseId } = route.params;
