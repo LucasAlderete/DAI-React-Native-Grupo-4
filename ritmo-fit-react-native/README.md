@@ -14,14 +14,17 @@ ritmo-fit-react-native/
 │   │   │   ├── ModalSelector.js  # Modal genérico de selección
 │   │   │   ├── CalendarModal.js  # Modal de calendario
 │   │   │   └── ClaseCard.js      # Tarjeta de clase
-│   │   └── ClaseDetail/
-│   │       └── index.js          # Detalle de clase individual
+│   │   ├── ClaseDetail/
+│   │   │    └── index.js         # Detalle de clase individual
+│   │   └── Profile/
+│   │        └── index.js         # Pantalla de perfil del usuario
 │   ├── config/
 │   │   └── calendarConfig.js     # Configuración del calendario en español
 │   ├── navigation/
 │   │   └── RootNavigator.js      # Navegación principal
 │   └── services/
 │       └── clasesService.js      # Cliente API para endpoints de clases
+│       └── usuarioService.js     # Cliente API para endpoints de usuarios
 ├── App.js                        # Punto de entrada con NavigationContainer
 ├── index.js                      # Registro del componente raíz
 └── package.json                  # Dependencias del proyecto
@@ -42,6 +45,18 @@ ritmo-fit-react-native/
 2. **GET /clases/{id}**
    - Obtiene el detalle de una clase específica por ID
    - Función: `getClaseById(id)`
+
+3. **GET /usuario/perfil**
+   - Obtiene los datos del perfil del usuario autenticado
+   - Función: `getUsuario(token)`
+
+4. **PUT /usuario/perfil**
+   - Actualiza los datos (nombre, email) del perfil del usuario
+   - Función: `updateUsuarioPerfil(token, usuarioData)`
+
+5. **PUT /usuario/perfil/imagen**
+   - Actualiza la imagen de perfil del usuario
+   - Función: `uploadUsuarioImagen(token, imagen)`
 
 ## Instalación
 
@@ -88,6 +103,16 @@ npm run ios
 - Detalle completo de una clase
 - Información: fecha/hora, duración, instructor, cupos, sede, dirección
 - Botón "Reservar" (funcionalidad pendiente)
+- Estados de loading y error
+
+### Profile
+- Pantalla de perfil de usuario
+- Muestra el nombre, email y foto de usuario
+- Permite editar y actualizar los datos del perfil
+- Permite cambiar la foto seleccionando una imagen desde la galería
+- Solicita permisos de acceso a la galería con Expo ImagePicker
+- Botón "Actualizar"
+- Botón "Cerrar Sesión" (funcionalidad pendiente)
 - Estados de loading y error
 
 ## Próximos Pasos

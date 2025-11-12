@@ -3,13 +3,18 @@ import { View, ActivityIndicator, Text } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { authService, authEvents } from '../services/authService';
 
+// Pantallas de autenticación
 import LoginScreen from '../screens/auth/LoginScreen';
 import RegisterScreen from '../screens/auth/RegisterScreen';
 import VerifyCodeScreen from '../screens/auth/VerifyCodeScreen';
 import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen';
 import BiometricUnlockScreen from '../screens/auth/BiometricUnlockScreen';
 
+// Pantalla principal y secciones del master
 import HomeScreen from '../screens/main/HomeScreen';
+import ClasesList from '../components/ClasesList';
+import ClaseDetail from '../components/ClaseDetail';
+import Profile from '../components/Profile';
 
 const Stack = createStackNavigator();
 
@@ -65,9 +70,17 @@ export default function RootNavigator() {
           <>
             <Stack.Screen name="BiometricUnlock" component={BiometricUnlockScreen} />
             <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="ClasesList" component={ClasesList} />
+            <Stack.Screen name="ClaseDetail" component={ClaseDetail} />
+            <Stack.Screen name="Profile" component={Profile} />
           </>
         ) : (
-          <Stack.Screen name="Home" component={HomeScreen} />
+          <>
+            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="ClasesList" component={ClasesList} />
+            <Stack.Screen name="ClaseDetail" component={ClaseDetail} />
+            <Stack.Screen name="Profile" component={Profile} />
+          </>
         )
       ) : (
         <>
