@@ -15,13 +15,18 @@ export default function HomeScreen({ navigation }) {
       />
 
       <TouchableOpacity 
-        style={styles.button}>
+        style={styles.button}
+        onPress={() => navigation.navigate('ClasesList')}
+      >
         <Text style={styles.buttonText}>Ver Clases</Text>
       </TouchableOpacity>
 
       <TouchableOpacity 
         style={[styles.button, styles.reservasButton]}
-        onPress={() => navigation.navigate('MisReservas')}
+        onPress={() => {
+          // Navegar al tab de Reservas
+          navigation.getParent()?.navigate('Reservas');
+        }}
       >
         <Text style={styles.buttonText}>📅 Mis Reservas</Text>
       </TouchableOpacity>
