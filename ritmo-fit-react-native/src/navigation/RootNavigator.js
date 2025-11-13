@@ -16,6 +16,11 @@ import ClasesList from '../components/ClasesList';
 import ClaseDetail from '../components/ClaseDetail';
 import ProfileScreen from '../screens/profile/ProfileScreen';
 
+// Pantallas de reservas
+import MisReservasScreen from '../screens/reservas/MisReservasScreen';
+import CrearReservaScreen from '../screens/reservas/CrearReservaScreen';
+import DetalleReservaScreen from '../screens/reservas/DetalleReservaScreen';
+
 const Stack = createStackNavigator();
 
 export default function RootNavigator() {
@@ -73,6 +78,9 @@ export default function RootNavigator() {
             <Stack.Screen name="ClasesList" component={ClasesList} />
             <Stack.Screen name="ClaseDetail" component={ClaseDetail} />
             <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+            <Stack.Screen name="MisReservas" component={MisReservasScreen} />
+            <Stack.Screen name="CrearReserva" component={CrearReservaScreen} />
+            <Stack.Screen name="DetalleReserva" component={DetalleReservaScreen} />
           </>
         ) : (
           <>
@@ -80,6 +88,9 @@ export default function RootNavigator() {
             <Stack.Screen name="ClasesList" component={ClasesList} />
             <Stack.Screen name="ClaseDetail" component={ClaseDetail} />
             <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+            <Stack.Screen name="MisReservas" component={MisReservasScreen} />
+            <Stack.Screen name="CrearReserva" component={CrearReservaScreen} />
+            <Stack.Screen name="DetalleReserva" component={DetalleReservaScreen} />
           </>
         )
       ) : (

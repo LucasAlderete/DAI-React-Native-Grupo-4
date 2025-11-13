@@ -29,6 +29,13 @@ export default function HomeScreen({ navigation }) {
         <Text style={styles.buttonText}>Ver Clases</Text>
       </TouchableOpacity>
 
+      <TouchableOpacity 
+        style={[styles.button, styles.reservasButton]}
+        onPress={() => navigation.navigate('MisReservas')}
+      >
+        <Text style={styles.buttonText}>📅 Mis Reservas</Text>
+      </TouchableOpacity>
+
       <TouchableOpacity style={[styles.button, styles.secondaryButton]}
         onPress={() => navigation.navigate('ProfileScreen')}
       >
@@ -74,6 +81,9 @@ const styles = StyleSheet.create({
   },
   secondaryButton: {
     backgroundColor: '#28a745',
+  },
+  reservasButton: {
+    backgroundColor: '#6f42c1',
   },
   logoutButton: {
     backgroundColor: '#dc3545',
