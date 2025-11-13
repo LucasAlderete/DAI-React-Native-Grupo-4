@@ -2,7 +2,8 @@ import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { authService } from '../../services/authService';
 
-export default function HomeScreen() {
+export default function HomeScreen({ navigation }) {
+  /*
   const handleLogout = async () => {
     try {
       await authService.logout();
@@ -12,6 +13,7 @@ export default function HomeScreen() {
       Alert.alert('Error', 'No se pudo cerrar sesión.');
     }
   };
+  */
 
   return (
     <View style={styles.container}>
@@ -27,16 +29,12 @@ export default function HomeScreen() {
         <Text style={styles.buttonText}>Ver Clases</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={[styles.button, styles.secondaryButton]}>
+      <TouchableOpacity style={[styles.button, styles.secondaryButton]}
+        onPress={() => navigation.navigate('ProfileScreen')}
+      >
         <Text style={styles.buttonText}>Mi Perfil</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity
-        style={[styles.button, styles.logoutButton]}
-        onPress={handleLogout}
-      >
-        <Text style={styles.buttonText}>Cerrar Sesión</Text>
-      </TouchableOpacity>
     </View>
   );
 }

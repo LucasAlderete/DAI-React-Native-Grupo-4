@@ -12,7 +12,9 @@ export const authEvents = {
   },
 };
 
-const API_HOST = 'http://192.168.0.93:8080';
+// const API_HOST = 'http://192.168.0.93:8080';
+const API_HOST = 'http://192.168.0.62:8080';
+
 
 export const authService = {
   async login(email, password) {

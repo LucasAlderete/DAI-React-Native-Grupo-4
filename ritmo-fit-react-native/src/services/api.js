@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { tokenStorage } from './tokenStorage';
 
-const API_URL = 'http://192.168.0.93:8080/api/';
+// const API_URL = 'http://192.168.0.93:8080/api/';
+const API_URL = 'http://192.168.0.62:8080/api/';
 
 const api = axios.create({
   baseURL: API_URL,

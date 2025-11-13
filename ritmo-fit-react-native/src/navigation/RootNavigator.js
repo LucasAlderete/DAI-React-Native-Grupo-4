@@ -14,7 +14,7 @@ import BiometricUnlockScreen from '../screens/auth/BiometricUnlockScreen';
 import HomeScreen from '../screens/main/HomeScreen';
 import ClasesList from '../components/ClasesList';
 import ClaseDetail from '../components/ClaseDetail';
-import Profile from '../components/Profile';
+import ProfileScreen from '../screens/profile/ProfileScreen';
 
 const Stack = createStackNavigator();
 
@@ -72,14 +72,14 @@ export default function RootNavigator() {
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="ClasesList" component={ClasesList} />
             <Stack.Screen name="ClaseDetail" component={ClaseDetail} />
-            <Stack.Screen name="Profile" component={Profile} />
+            <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
           </>
         ) : (
           <>
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="ClasesList" component={ClasesList} />
             <Stack.Screen name="ClaseDetail" component={ClaseDetail} />
-            <Stack.Screen name="Profile" component={Profile} />
+            <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
           </>
         )
       ) : (
