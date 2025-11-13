@@ -10,7 +10,7 @@ export default function BiometricUnlockScreen({ navigation }) {
       });
       if (result.success) {
         Alert.alert('Autenticación exitosa');
-        navigation.replace('Home');
+        navigation.replace('MainTabs');
       } else {
         Alert.alert('Falló la autenticación');
       }

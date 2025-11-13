@@ -171,7 +171,10 @@ export default function MisReservasScreen({ navigation }) {
       </Text>
       <TouchableOpacity
         style={styles.crearButton}
-        onPress={() => navigation.navigate('CrearReserva')}
+        onPress={() => {
+          // Navegar a CrearReserva en el ReservasStack
+          navigation.navigate('CrearReserva');
+        }}
       >
         <Text style={styles.crearButtonText}>➕ Reservar Clase</Text>
       </TouchableOpacity>
@@ -190,15 +193,12 @@ export default function MisReservasScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.backButton}
-        >
-          <Text style={styles.backButtonText}>← Volver</Text>
-        </TouchableOpacity>
         <Text style={styles.title}>Mis Reservas</Text>
         <TouchableOpacity
-          onPress={() => navigation.navigate('CrearReserva')}
+          onPress={() => {
+            // Navegar a CrearReserva en el ReservasStack
+            navigation.navigate('CrearReserva');
+          }}
           style={styles.addButton}
         >
           <Text style={styles.addButtonText}>+ Nueva</Text>

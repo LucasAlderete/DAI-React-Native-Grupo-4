@@ -104,7 +104,7 @@ export default function DetalleReservaScreen({ navigation, route }) {
                 [
                   {
                     text: 'OK',
-                    onPress: () => navigation.navigate('MisReservas'),
+                    onPress: () => navigation.navigate('MisReservasMain'),
                   },
                 ]
               );
@@ -134,17 +134,6 @@ export default function DetalleReservaScreen({ navigation, route }) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.backButton}
-        >
-          <Text style={styles.backButtonText}>← Volver</Text>
-        </TouchableOpacity>
-        <Text style={styles.title}>Detalle de Reserva</Text>
-        <View style={styles.placeholder} />
-      </View>
-
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.content}>
         {/* Estado de la Reserva */}
         <View style={styles.estadoContainer}>
@@ -290,32 +279,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 20,
-    paddingTop: 50,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
-  backButton: {
-    padding: 5,
-  },
-  backButtonText: {
-    fontSize: 16,
-    color: '#007bff',
-    fontWeight: '600',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#222',
-  },
-  placeholder: {
-    width: 60,
   },
   scrollView: {
     flex: 1,

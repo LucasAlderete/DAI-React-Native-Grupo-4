@@ -75,7 +75,10 @@ export default function CrearReservaScreen({ navigation }) {
                 [
                   {
                     text: 'Ver mis reservas',
-                    onPress: () => navigation.navigate('MisReservas'),
+                    onPress: () => {
+                      // Navegar de vuelta a MisReservasMain en el mismo stack
+                      navigation.navigate('MisReservasMain');
+                    },
                   },
                   {
                     text: 'OK',
@@ -246,17 +249,6 @@ export default function CrearReservaScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.backButton}
-        >
-          <Text style={styles.backButtonText}>← Volver</Text>
-        </TouchableOpacity>
-        <Text style={styles.title}>Reservar Clase</Text>
-        <View style={styles.placeholder} />
-      </View>
-
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
@@ -294,32 +286,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 20,
-    paddingTop: 50,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
-  backButton: {
-    padding: 5,
-  },
-  backButtonText: {
-    fontSize: 16,
-    color: '#007bff',
-    fontWeight: '600',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#222',
-  },
-  placeholder: {
-    width: 60,
   },
   searchContainer: {
     padding: 15,

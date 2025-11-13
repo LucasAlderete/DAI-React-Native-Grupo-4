@@ -10,16 +10,8 @@ import VerifyCodeScreen from '../screens/auth/VerifyCodeScreen';
 import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen';
 import BiometricUnlockScreen from '../screens/auth/BiometricUnlockScreen';
 
-// Pantalla principal y secciones del master
-import HomeScreen from '../screens/main/HomeScreen';
-import ClasesList from '../components/ClasesList';
-import ClaseDetail from '../components/ClaseDetail';
-import ProfileScreen from '../screens/profile/ProfileScreen';
-
-// Pantallas de reservas
-import MisReservasScreen from '../screens/reservas/MisReservasScreen';
-import CrearReservaScreen from '../screens/reservas/CrearReservaScreen';
-import DetalleReservaScreen from '../screens/reservas/DetalleReservaScreen';
+// Navegación principal
+import TabNavigator from './TabNavigator';
 
 const Stack = createStackNavigator();
 
@@ -74,23 +66,11 @@ export default function RootNavigator() {
         hasTokenFromStartup ? (
           <>
             <Stack.Screen name="BiometricUnlock" component={BiometricUnlockScreen} />
-            <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name="ClasesList" component={ClasesList} />
-            <Stack.Screen name="ClaseDetail" component={ClaseDetail} />
-            <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
-            <Stack.Screen name="MisReservas" component={MisReservasScreen} />
-            <Stack.Screen name="CrearReserva" component={CrearReservaScreen} />
-            <Stack.Screen name="DetalleReserva" component={DetalleReservaScreen} />
+            <Stack.Screen name="MainTabs" component={TabNavigator} />
           </>
         ) : (
           <>
-            <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name="ClasesList" component={ClasesList} />
-            <Stack.Screen name="ClaseDetail" component={ClaseDetail} />
-            <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
-            <Stack.Screen name="MisReservas" component={MisReservasScreen} />
-            <Stack.Screen name="CrearReserva" component={CrearReservaScreen} />
-            <Stack.Screen name="DetalleReserva" component={DetalleReservaScreen} />
+            <Stack.Screen name="MainTabs" component={TabNavigator} />
           </>
         )
       ) : (

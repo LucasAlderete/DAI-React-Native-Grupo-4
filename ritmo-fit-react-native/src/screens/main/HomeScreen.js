@@ -25,19 +25,29 @@ export default function HomeScreen({ navigation }) {
         placeholderTextColor="#aaa"
       />
 
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity 
+        style={styles.button}
+        onPress={() => navigation.navigate('ClasesList')}
+      >
         <Text style={styles.buttonText}>Ver Clases</Text>
       </TouchableOpacity>
 
       <TouchableOpacity 
         style={[styles.button, styles.reservasButton]}
-        onPress={() => navigation.navigate('MisReservas')}
+        onPress={() => {
+          // Navegar al tab de Reservas
+          navigation.getParent()?.navigate('Reservas');
+        }}
       >
         <Text style={styles.buttonText}>📅 Mis Reservas</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={[styles.button, styles.secondaryButton]}
-        onPress={() => navigation.navigate('ProfileScreen')}
+      <TouchableOpacity 
+        style={[styles.button, styles.secondaryButton]}
+        onPress={() => {
+          // Navegar al tab de Mi Perfil
+          navigation.getParent()?.navigate('MiPerfil');
+        }}
       >
         <Text style={styles.buttonText}>Mi Perfil</Text>
       </TouchableOpacity>
