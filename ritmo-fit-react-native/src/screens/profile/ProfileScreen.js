@@ -9,13 +9,13 @@ import {
   ActivityIndicator,
   ScrollView,
   Alert,
-  Platform,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import {
   getUsuario,
   updateUsuarioPerfil,
   uploadUsuarioImagen,
+  getFullFotoUrl,
 } from '../../services/usuarioService';
 import { authService } from '../../services/authService';
 
@@ -25,21 +25,10 @@ const ProfileScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [fotoUri, setFotoUri] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [updating, setUpdating] = useState(false);
-  const [hasGalleryPermission, setHasGalleryPermission] = useState(null);
 
   useEffect(() => {
-    requestGalleryPermission();
     fetchPerfil();
   }, []);
-
-  const requestGalleryPermission = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    setHasGalleryPermission(status === 'granted');
-    if (status !== 'granted') {
-      Alert.alert('Permiso denegado', 'Necesitamos acceso a la galería.');
-    }
-  };
 
   const fetchPerfil = async () => {
     setLoading(true);
@@ -50,12 +39,8 @@ const ProfileScreen = ({ navigation }) => {
       setUsuario(data);
       setNombre(data.nombre || '');
       setEmail(data.email || '');
-      
-      const fotoBack = data.fotoUrl
-      ? `http://192.168.0.62:8080${encodeURI(data.fotoUrl)}?t=${Date.now()}`
-      : `http://192.168.0.62:8080/uploads/default-profile.png`;
 
-      setFotoUri(fotoBack);
+      setFotoUri(getFullFotoUrl(data.fotoUrl));
 
     } catch (error) {
       console.log('Error al cargar perfil:', error);
@@ -68,7 +53,6 @@ const ProfileScreen = ({ navigation }) => {
   const handleUpdatePerfil = async () => {
     if (!usuario) return;
     try {
-      setUpdating(true);
       const updatedData = {};
       if (nombre !== usuario.nombre) updatedData.nombre = nombre;
       if (email !== usuario.email) updatedData.email = email;
@@ -86,15 +70,14 @@ const ProfileScreen = ({ navigation }) => {
     } catch (error) {
       console.log('Error al actualizar perfil:', error);
       Alert.alert('Error', 'No se pudo actualizar el perfil.');
-    } finally {
-      setUpdating(false);
     }
   };
 
   const handlePickImage = async () => {
-    if (!hasGalleryPermission) {
-      Alert.alert('Error', 'No se tienen permisos para abrir la galería.');
-      return;
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Permiso denegado', 'No se puede acceder a la galería sin permisos.');
+    return;
     }
 
     try {
@@ -107,26 +90,21 @@ const ProfileScreen = ({ navigation }) => {
       if (!result.canceled) {
         const asset = result.assets[0];
         let uri = asset.uri;
-        if (Platform.OS === 'ios') uri = uri.replace('file://', '');
-
         const uriParts = uri.split('.');
         const fileType = uriParts[uriParts.length - 1];
 
         const formData = new FormData();
         formData.append('imagen', {
-          uri: Platform.OS === 'ios' ? asset.uri.replace('file://', '') : asset.uri,
+          uri,
           name: `perfil.${fileType}`,
           type: `image/${fileType}`,
         });
 
         const updatedUsuario = await uploadUsuarioImagen(formData);
 
-        setFotoUri(
-          updatedUsuario.fotoUrl
-            ? `http://192.168.0.62:8080${encodeURI(updatedUsuario.fotoUrl)}?t=${Date.now()}`
-            : null
-        );
+        setFotoUri(getFullFotoUrl(updatedUsuario.fotoUrl));
         setUsuario(updatedUsuario);
+
         Alert.alert('Éxito', 'Imagen de perfil actualizada.');
       }
     } catch (error) {
@@ -155,57 +133,100 @@ const ProfileScreen = ({ navigation }) => {
   }
 
   return (
-    <ScrollView contentContainerStyle={[styles.container, { paddingTop: 120 }]}>
-        
-      <TouchableOpacity onPress={handlePickImage}>
-        <Image
-          key={fotoUri}
-          source={{ uri: fotoUri }}
-          style={styles.profileImage}
+    <View style={styles.container}>
+
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.backButton}
+        >
+          <Text style={styles.backButtonText}>← Volver</Text>
+        </TouchableOpacity>
+        <Text style={styles.title}>Mi Perfil</Text>
+        <View style={{ width: 60 }} />
+      </View>
+
+      <View style={styles.content}>
+
+        <TouchableOpacity onPress={handlePickImage}>
+          <Image
+            key={fotoUri}
+            source={{ uri: fotoUri }}
+            style={styles.profileImage}
+          />
+        </TouchableOpacity>
+
+        <Text style={styles.label}>Nombre</Text>
+        <TextInput
+          style={styles.input}
+          value={nombre}
+          onChangeText={setNombre}
+          placeholder="Tu nombre"
         />
-      </TouchableOpacity>
 
-      <Text style={styles.label}>Nombre</Text>
-      <TextInput
-        style={styles.input}
-        value={nombre}
-        onChangeText={setNombre}
-        placeholder="Tu nombre"
-      />
+        <Text style={styles.label}>Email</Text>
+        <TextInput
+          style={styles.input}
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          placeholder="Tu email"
+        />
 
-      <Text style={styles.label}>Email</Text>
-      <TextInput
-        style={styles.input}
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        placeholder="Tu correo electrónico"
-      />
+        <TouchableOpacity
+          style={[styles.button, styles.updateButton]}
+          onPress={handleUpdatePerfil}
+        >
+          <Text style={styles.buttonText}>Actualizar</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.updateButton}
-        onPress={handleUpdatePerfil}
-        disabled={updating}
-      >
-        <Text style={styles.updateButtonText}>
-          {updating ? 'Actualizando...' : 'Actualizar'}
-        </Text>
-      </TouchableOpacity>
+        <TouchableOpacity 
+          style={[styles.button, styles.logoutButton]} 
+          onPress={handleLogout}
+        >
+          <Text style={styles.buttonText}>Cerrar sesión</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-        <Text style={styles.logoutButtonText}>Cerrar sesión</Text>
-      </TouchableOpacity>
+      </View>
 
-    </ScrollView>
+    </View>
   );
+    
 };
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+  },
+   header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#F5F5F5',
-    flexGrow: 1,
+    paddingTop: 50,
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
+  },
+  content: {
+    marginTop: 20,
+    alignItems: 'center',
+    padding: 20,
+    width: '100%',
+  },
+    backButton: {
+    padding: 5,
+  },
+  backButtonText: {
+    fontSize: 16,
+    color: '#007bff',
+    fontWeight: '600',
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#222',
   },
   profileImage: {
     width: 120,
@@ -229,32 +250,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderWidth: 1,
     borderColor: '#D1D5DB',
+    marginBottom: 15,
+  },
+  button: {
+    width: '90%',
+    paddingVertical: 15,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginBottom: 15,
   },
   updateButton: {
-    marginTop: 24,
     backgroundColor: '#2563EB',
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 8,
-    width: '50%',
-    alignItems: 'center',
-  },
-  updateButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 16,
+    marginTop: 20,
   },
   logoutButton: {
-    marginTop: 16,
     backgroundColor: '#DC2626',
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 8,
-    width: '50%',
-    alignItems: 'center',
   },
-  logoutButtonText: {
-    color: 'white',
+  buttonText: {
+    color: '#FFF',
     fontWeight: 'bold',
     fontSize: 16,
   },

@@ -3,17 +3,6 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'reac
 import { authService } from '../../services/authService';
 
 export default function HomeScreen({ navigation }) {
-  /*
-  const handleLogout = async () => {
-    try {
-      await authService.logout();
-      Alert.alert('Sesión cerrada', 'Has cerrado sesión correctamente.');
-
-    } catch (error) {
-      Alert.alert('Error', 'No se pudo cerrar sesión.');
-    }
-  };
-  */
 
   return (
     <View style={styles.container}>
@@ -43,13 +32,10 @@ export default function HomeScreen({ navigation }) {
       </TouchableOpacity>
 
       <TouchableOpacity 
-        style={[styles.button, styles.secondaryButton]}
-        onPress={() => {
-          // Navegar al tab de Mi Perfil
-          navigation.getParent()?.navigate('MiPerfil');
-        }}
+        style={[styles.button, styles.profileButton]}
+        onPress={() => navigation.navigate('ProfileScreen')}
       >
-        <Text style={styles.buttonText}>Mi Perfil</Text>
+        <Text style={styles.buttonText}>👤 Mi Perfil</Text>
       </TouchableOpacity>
 
     </View>
@@ -89,7 +75,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 15,
   },
-  secondaryButton: {
+  profileButton: {
     backgroundColor: '#28a745',
   },
   reservasButton: {
