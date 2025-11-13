@@ -35,6 +35,12 @@ export default function HomeScreen({ navigation }) {
         <Text style={styles.buttonText}>Mi Perfil</Text>
       </TouchableOpacity>
 
+      <TouchableOpacity style={[styles.button, styles.historialButton]}
+        onPress={() => navigation.navigate('Historial')}
+      >
+        <Text style={styles.buttonText}>Ver Historial</Text>
+      </TouchableOpacity>
+
     </View>
   );
 }
@@ -74,6 +80,9 @@ const styles = StyleSheet.create({
   },
   secondaryButton: {
     backgroundColor: '#28a745',
+  },
+  historialButton: {
+    backgroundColor: '#8B5CF6',
   },
   logoutButton: {
     backgroundColor: '#dc3545',

@@ -18,6 +18,7 @@ import {
   uploadUsuarioImagen,
 } from '../../services/usuarioService';
 import { authService } from '../../services/authService';
+import API_CONFIG from '../../config/apiConfig';
 
 const ProfileScreen = ({ navigation }) => {
   const [usuario, setUsuario] = useState(null);
@@ -52,8 +53,8 @@ const ProfileScreen = ({ navigation }) => {
       setEmail(data.email || '');
       
       const fotoBack = data.fotoUrl
-      ? `http://192.168.0.62:8080${encodeURI(data.fotoUrl)}?t=${Date.now()}`
-      : `http://192.168.0.62:8080/uploads/default-profile.png`;
+      ? `${API_CONFIG.HOST}${encodeURI(data.fotoUrl)}?t=${Date.now()}`
+      : `${API_CONFIG.HOST}/uploads/default-profile.png`;
 
       setFotoUri(fotoBack);
 
@@ -123,7 +124,7 @@ const ProfileScreen = ({ navigation }) => {
 
         setFotoUri(
           updatedUsuario.fotoUrl
-            ? `http://192.168.0.62:8080${encodeURI(updatedUsuario.fotoUrl)}?t=${Date.now()}`
+            ? `${API_CONFIG.HOST}${encodeURI(updatedUsuario.fotoUrl)}?t=${Date.now()}`
             : null
         );
         setUsuario(updatedUsuario);

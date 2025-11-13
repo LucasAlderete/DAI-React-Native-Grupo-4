@@ -15,6 +15,7 @@ import HomeScreen from '../screens/main/HomeScreen';
 import ClasesList from '../components/ClasesList';
 import ClaseDetail from '../components/ClaseDetail';
 import ProfileScreen from '../screens/profile/ProfileScreen';
+import HistorialScreen from '../screens/historial/HistorialScreen';
 
 const Stack = createStackNavigator();
 
@@ -73,6 +74,7 @@ export default function RootNavigator() {
             <Stack.Screen name="ClasesList" component={ClasesList} />
             <Stack.Screen name="ClaseDetail" component={ClaseDetail} />
             <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+            <Stack.Screen name="Historial" component={HistorialScreen} />
           </>
         ) : (
           <>
@@ -80,6 +82,7 @@ export default function RootNavigator() {
             <Stack.Screen name="ClasesList" component={ClasesList} />
             <Stack.Screen name="ClaseDetail" component={ClaseDetail} />
             <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+            <Stack.Screen name="Historial" component={HistorialScreen} />
           </>
         )
       ) : (

@@ -1,4 +1,5 @@
 import api from './api';
+import API_CONFIG from '../config/apiConfig';
 
 export const getUsuario = async () => {
   const response = await api.get('/usuario/perfil');
@@ -17,7 +18,7 @@ export const uploadUsuarioImagen = async (formData) => {
   return response.data;
 };
 
-  export const getFullFotoUrl = (fotoUrl) => {
+export const getFullFotoUrl = (fotoUrl) => {
   if (!fotoUrl) return null;
-  return `http://192.168.0.62:8080${fotoUrl}`;
+  return `${API_CONFIG.HOST}${fotoUrl}`;
 };
