@@ -9,25 +9,41 @@ ritmo-fit-react-native/
 ├── src/
 │   ├── components/
 │   │   ├── ClasesList/
-│   │   │   ├── index.js          # Pantalla principal - Listado de clases
-│   │   │   ├── FilterSelector.js # Componente de filtro reutilizable
-│   │   │   ├── ModalSelector.js  # Modal genérico de selección
-│   │   │   ├── CalendarModal.js  # Modal de calendario
-│   │   │   └── ClaseCard.js      # Tarjeta de clase
-│   │   ├── ClaseDetail/
-│   │   │    └── index.js         # Detalle de clase individual
-│   │   └── Profile/
-│   │        └── index.js         # Pantalla de perfil del usuario
+│   │   │   ├── index.js                     # Pantalla principal - Listado de clases
+│   │   │   ├── FilterSelector.js            # Componente de filtro reutilizable
+│   │   │   ├── ModalSelector.js             # Modal genérico de selección
+│   │   │   ├── CalendarModal.js             # Modal de calendario
+│   │   │   └── ClaseCard.js                 # Tarjeta de clase
+│   │   └── ClaseDetail/
+│   │       └── index.js                     # Detalle de clase individual
 │   ├── config/
-│   │   └── calendarConfig.js     # Configuración del calendario en español
+│   │   └── calendarConfig.js                # Configuración del calendario en español
 │   ├── navigation/
-│   │   └── RootNavigator.js      # Navegación principal
-│   └── services/
-│       └── clasesService.js      # Cliente API para endpoints de clases
-│       └── usuarioService.js     # Cliente API para endpoints de usuarios
-├── App.js                        # Punto de entrada con NavigationContainer
-├── index.js                      # Registro del componente raíz
-└── package.json                  # Dependencias del proyecto
+│   │   └── RootNavigator.js                 # Navegación principal
+│   ├── screens/
+│   │   ├── auth/
+│   │   │   ├── BiometricUnlockScreen.js     # 
+│   │   │   ├── ForgotPasswordScreen.js      # 
+│   │   │   ├── LoginScreen.js               # 
+│   │   │   ├── RegisterScreen.js            # 
+│   │   │   └── VerifyCodeScreen.js          # 
+│   │   ├── main/
+│   │   │   └── HomeScreen.js                # 
+│   │   ├── profile/
+│   │   │   └── ProfileScreen.js             # Pantalla de perfil del usuario
+│   │   └── reservas/
+│   │       ├── CrearReservaScreen.js        # 
+│   │       ├── DetalleReservaScreen.js      # 
+│   │       └── MisReservasScreen.js         # 
+│   │
+│   ├── services/
+│   │   └── clasesService.js                 # Cliente API para endpoints de clases
+│   │   └── usuarioService.js                # Cliente API para endpoints de usuarios
+│   └── utils/
+│       └── dateFormatter.js                 # 
+├── App.js                                   # Punto de entrada con NavigationContainer
+├── index.js                                 # Registro del componente raíz
+└── package.json                             # Dependencias del proyecto
 ```
 
 ## API Endpoints Configurados
@@ -48,15 +64,15 @@ ritmo-fit-react-native/
 
 3. **GET /usuario/perfil**
    - Obtiene los datos del perfil del usuario autenticado
-   - Función: `getUsuario(token)`
+   - Función: `getUsuario()`
 
 4. **PUT /usuario/perfil**
    - Actualiza los datos (nombre, email) del perfil del usuario
-   - Función: `updateUsuarioPerfil(token, usuarioData)`
+   - Función: `updateUsuarioPerfil(usuarioData)`
 
 5. **PUT /usuario/perfil/imagen**
    - Actualiza la imagen de perfil del usuario
-   - Función: `uploadUsuarioImagen(token, imagen)`
+   - Función: `uploadUsuarioImagen(formData)`
 
 ## Instalación
 
@@ -112,7 +128,7 @@ npm run ios
 - Permite cambiar la foto seleccionando una imagen desde la galería
 - Solicita permisos de acceso a la galería con Expo ImagePicker
 - Botón "Actualizar"
-- Botón "Cerrar Sesión" (funcionalidad pendiente)
+- Botón "Cerrar Sesión"
 - Estados de loading y error
 
 ## Próximos Pasos

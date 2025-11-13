@@ -1,5 +1,7 @@
 import api from './api';
 
+const SERVER_URL = 'http://192.168.0.62:8080';
+
 export const getUsuario = async () => {
   const response = await api.get('/usuario/perfil');
   return response.data;
@@ -17,7 +19,7 @@ export const uploadUsuarioImagen = async (formData) => {
   return response.data;
 };
 
-  export const getFullFotoUrl = (fotoUrl) => {
-  if (!fotoUrl) return null;
-  return `http://192.168.0.62:8080${fotoUrl}`;
+export const getFullFotoUrl = (fotoUrl) => {
+  if (!fotoUrl) return `${SERVER_URL}/images/default-profile.png`;
+  return `${SERVER_URL}${encodeURI(fotoUrl)}?t=${Date.now()}`;
 };
