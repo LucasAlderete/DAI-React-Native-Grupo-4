@@ -14,6 +14,7 @@ import ClasesList from "../components/ClasesList";
 import ClaseDetail from "../components/ClaseDetail";
 import DetalleReservaScreen from "../screens/reservas/DetalleReservaScreen";
 import CrearReservaScreen from "../screens/reservas/CrearReservaScreen";
+import HistorialScreen from "../screens/historial/HistorialScreen"
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -35,6 +36,21 @@ const HomeStack = () => {
         name="ClaseDetail"
         component={ClaseDetail}
         options={{ title: "Detalle de Clase" }}
+      />
+      <Stack.Screen
+        name="Historial"
+        component={HistorialScreen}
+        options={{ 
+          title: "Historial de Asistencias",
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: '#FFFFFF',
+          },
+          headerTintColor: '#2563EB',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+        }}
       />
     </Stack.Navigator>
   );
@@ -82,6 +98,18 @@ const ReservasStack = () => {
   );
 };
 
+const HistorialStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="HistorialMain"
+        component={HistorialScreen}
+        options={{ headerShown: false }}
+      />
+    </Stack.Navigator>
+  );
+};
+
 const TabNavigator = () => {
   const insets = useSafeAreaInsets();
   
@@ -122,6 +150,16 @@ const TabNavigator = () => {
           tabBarLabel: "Reservas",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="book" size={size || 24} color={color} />
+          )
+        }}
+      />
+      <Tab.Screen
+        name="Historial"
+        component={HistorialStack}
+        options={{ 
+          tabBarLabel: "Historial",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="time" size={size || 24} color={color} />
           )
         }}
       />

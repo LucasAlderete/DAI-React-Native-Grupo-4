@@ -38,6 +38,16 @@ export default function HomeScreen({ navigation }) {
         <Text style={styles.buttonText}>👤 Mi Perfil</Text>
       </TouchableOpacity>
 
+      <TouchableOpacity 
+        style={[styles.button, styles.historialButton]}
+        onPress={() => {
+          // Navegar al tab de Historial
+          navigation.getParent()?.navigate('Historial');
+        }}
+      >
+        <Text style={styles.buttonText}>📊 Ver Historial</Text>
+      </TouchableOpacity>
+
     </View>
   );
 }
@@ -80,6 +90,9 @@ const styles = StyleSheet.create({
   },
   reservasButton: {
     backgroundColor: '#6f42c1',
+  },
+  historialButton: {
+    backgroundColor: '#8B5CF6',
   },
   logoutButton: {
     backgroundColor: '#dc3545',

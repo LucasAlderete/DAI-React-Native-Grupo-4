@@ -1,5 +1,6 @@
 import { apiService } from './apiService';
 import { tokenStorage } from './tokenStorage';
+import API_CONFIG from '../config/apiConfig';
 
 const listeners = new Set();
 export const authEvents = {
@@ -12,8 +13,7 @@ export const authEvents = {
   },
 };
 
-// const API_HOST = 'http://192.168.0.93:8080';
-const API_HOST = 'http://192.168.0.62:8080';
+const API_HOST = API_CONFIG.HOST;
 
 
 export const authService = {
