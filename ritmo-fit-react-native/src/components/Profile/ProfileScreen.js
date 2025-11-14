@@ -18,7 +18,7 @@ import {
 } from '../../services/usuarioService';
 import { authService } from '../../services/authService';
 import { ThemeContext } from '../../context/ThemeContext';
-import ThemeToggle from '../../components/ThemeToggle';
+import ThemeToggle from '../ThemeToggle';
 import { lightColors, darkColors } from '../../config/colors';
 
 const ProfileScreen = ({ navigation }) => {

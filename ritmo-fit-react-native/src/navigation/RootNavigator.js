@@ -4,11 +4,11 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { authService, authEvents } from '../services/authService';
 
 // Pantallas de autenticación
-import LoginScreen from '../screens/auth/LoginScreen';
-import RegisterScreen from '../screens/auth/RegisterScreen';
-import VerifyCodeScreen from '../screens/auth/VerifyCodeScreen';
-import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen';
-import BiometricUnlockScreen from '../screens/auth/BiometricUnlockScreen';
+import LoginScreen from '../components/Auth/LoginScreen';
+import RegisterScreen from '../components/Auth/RegisterScreen';
+import VerifyCodeScreen from '../components/Auth/VerifyCodeScreen';
+import ForgotPasswordScreen from '../components/Auth/ForgotPasswordScreen';
+import BiometricUnlockScreen from '../components/Auth/BiometricUnlockScreen';
 
 // Navegación principal
 import TabNavigator from './TabNavigator';

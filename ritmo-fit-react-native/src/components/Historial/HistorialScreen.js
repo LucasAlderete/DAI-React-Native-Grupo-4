@@ -1,8 +1,8 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, ActivityIndicator, TouchableOpacity, RefreshControl } from 'react-native';
 import { getHistorialAsistencias, formatDateForBackend } from '../../services/historialService';
-import AsistenciaCard from '../../components/Historial/AsistenciaCard';
-import DateRangeFilter from '../../components/Historial/DateRangeFilter';
+import AsistenciaCard from './AsistenciaCard';
+import DateRangeFilter from './DateRangeFilter';
 import { ThemeContext } from '../../context/ThemeContext';
 import { lightColors, darkColors } from '../../config/colors';
 

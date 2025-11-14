@@ -5,16 +5,16 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 
 // Pantallas principales
-import HomeScreen from "../screens/main/HomeScreen";
-import ProfileScreen from "../screens/profile/ProfileScreen";
-import MisReservasScreen from "../screens/reservas/MisReservasScreen";
+import HomeScreen from "../components/Main/HomeScreen";
+import ProfileScreen from "../components/Profile/ProfileScreen";
+import MisReservasScreen from "../components/Reservas/MisReservasScreen";
 
 // Componentes de navegación
 import ClasesList from "../components/ClasesList";
 import ClaseDetail from "../components/ClaseDetail";
-import DetalleReservaScreen from "../screens/reservas/DetalleReservaScreen";
-import CrearReservaScreen from "../screens/reservas/CrearReservaScreen";
-import HistorialScreen from "../screens/historial/HistorialScreen"
+import DetalleReservaScreen from "../components/Reservas/DetalleReservaScreen";
+import CrearReservaScreen from "../components/Reservas/CrearReservaScreen";
+import HistorialScreen from "../components/Historial/HistorialScreen"
 
 // Tema
 import { ThemeContext } from '../context/ThemeContext';
