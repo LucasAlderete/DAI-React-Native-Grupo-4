@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, ActivityIndicator, TouchableOpacity, RefreshControl } from 'react-native';
 import { getHistorialAsistencias, formatDateForBackend } from '../../services/historialService';
 import AsistenciaCard from '../../components/Historial/AsistenciaCard';
 import DateRangeFilter from '../../components/Historial/DateRangeFilter';
+import { ThemeContext } from '../../context/ThemeContext';
+import { lightColors, darkColors } from '../../config/colors';
 
 const HistorialScreen = ({ navigation }) => {
     // ========================================
@@ -18,6 +20,9 @@ const HistorialScreen = ({ navigation }) => {
     const [fechaInicio, setFechaInicio] = useState(null);
     const [fechaFin, setFechaFin] = useState(null);
     const [isInitialLoad, setIsInitialLoad] = useState(true);
+
+    const { darkMode, toggleDarkMode } = useContext(ThemeContext);
+    const colors = darkMode ? darkColors : lightColors;
 
     // ========================================
     // EFECTO: Cargar datos al montar
@@ -133,12 +138,20 @@ const HistorialScreen = ({ navigation }) => {
     // RENDER PRINCIPAL
     // ========================================
     return (
-        <View style={styles.container}>
-            <View style={styles.header}>
+        <View style={[styles.container, { backgroundColor: colors.background }]}>
+            <View 
+            style={[
+                styles.header,
+                {
+                    backgroundColor: colors.background,
+                    borderBottomColor: colors.headerBorder,
+                },
+            ]}
+            >
                 <TouchableOpacity onPress={() => navigation.goBack()}>
                     <Text style={styles.backButton}>← Volver</Text>
                 </TouchableOpacity>
-                <Text style={styles.title}>Historial de asistencias</Text>
+                <Text style={[styles.title, { color: colors.text }]}>Historial de asistencias</Text>
             </View>
 
             <DateRangeFilter
@@ -155,7 +168,7 @@ const HistorialScreen = ({ navigation }) => {
                 contentContainerStyle={styles.listContainer}
                 ListEmptyComponent={
                     <View style={styles.emptyContainer}>
-                        <Text style={styles.emptyText}>No hay asistencias registradas</Text>
+                        <Text style={[styles.emptyText, {color: colors.textSecondary}]}>No hay asistencias registradas</Text>
                     </View>
                 }
             />
@@ -169,7 +182,6 @@ const HistorialScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F5F5F5',
     },
     centered: {
         flex: 1,
@@ -178,11 +190,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#F5F5F5',
     },
     header: {
-        backgroundColor: '#FFFFFF',
         padding: 16,
         paddingTop: 50,
         borderBottomWidth: 1,
-        borderBottomColor: '#E5E7EB',
     },
     backButton: {
         fontSize: 16,
@@ -192,7 +202,6 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 24,
         fontWeight: 'bold',
-        color: '#1F2937',
     },
     loadingText: {
         marginTop: 12,
@@ -225,7 +234,6 @@ const styles = StyleSheet.create({
     },
     emptyText: {
         fontSize: 16,
-        color: '#6B7280',
         textAlign: 'center',
     },
 });

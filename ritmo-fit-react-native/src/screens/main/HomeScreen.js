@@ -44,13 +44,6 @@ export default function HomeScreen({ navigation }) {
       </TouchableOpacity>
 
       <TouchableOpacity 
-        style={[styles.button, styles.profileButton]}
-        onPress={() => navigation.navigate('ProfileScreen')}
-      >
-        <Text style={styles.buttonText}>👤 Mi Perfil</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity 
         style={[styles.button, styles.historialButton]}
         onPress={() => {
           // Navegar al tab de Historial
@@ -98,10 +91,6 @@ const styles = StyleSheet.create({
   },
   historialButton: {
     backgroundColor: '#8B5CF6',
-  },
-  logoutButton: {
-    backgroundColor: '#dc3545',
-    marginTop: 30,
   },
   buttonText: {
     color: '#fff',
