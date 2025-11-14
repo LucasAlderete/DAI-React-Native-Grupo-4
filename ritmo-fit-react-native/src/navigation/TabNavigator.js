@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from 'react';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -15,6 +15,10 @@ import ClaseDetail from "../components/ClaseDetail";
 import DetalleReservaScreen from "../screens/reservas/DetalleReservaScreen";
 import CrearReservaScreen from "../screens/reservas/CrearReservaScreen";
 import HistorialScreen from "../screens/historial/HistorialScreen"
+
+// Tema
+import { ThemeContext } from '../context/ThemeContext';
+import { lightColors, darkColors } from '../config/colors';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -112,6 +116,9 @@ const HistorialStack = () => {
 
 const TabNavigator = () => {
   const insets = useSafeAreaInsets();
+
+  const { darkMode, toggleDarkMode } = useContext(ThemeContext);
+  const colors = darkMode ? darkColors : lightColors;
   
   return (
     <Tab.Navigator
@@ -120,9 +127,9 @@ const TabNavigator = () => {
         tabBarInactiveTintColor: "#6B7280",
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: "#FFFFFF",
+          backgroundColor: colors.background,
           borderTopWidth: 1,
-          borderTopColor: "#E5E7EB",
+          borderTopColor: colors.border,
           paddingBottom: Math.max(insets.bottom, 5) + 5,
           paddingTop: 5,
           height: 60 + Math.max(insets.bottom, 5),

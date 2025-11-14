@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -13,6 +13,9 @@ import FilterSelector from './FilterSelector';
 import ModalSelector from './ModalSelector';
 import CalendarModal from './CalendarModal';
 import ClaseCard from './ClaseCard';
+import ThemeToggle from '../ThemeToggle';
+import { lightColors, darkColors } from '../../config/colors';
+import { ThemeContext } from '../../context/ThemeContext';
 
 const ClasesList = ({ navigation }) => {
   const [clases, setClases] = useState([]);
@@ -31,6 +34,9 @@ const ClasesList = ({ navigation }) => {
   const [sedeModalVisible, setSedeModalVisible] = useState(false);
   const [disciplinaModalVisible, setDisciplinaModalVisible] = useState(false);
   const [fechaModalVisible, setFechaModalVisible] = useState(false);
+
+  const { darkMode, toggleDarkMode } = useContext(ThemeContext);
+  const colors = darkMode ? darkColors : lightColors;
 
   useEffect(() => {
     fetchClases();
@@ -145,8 +151,15 @@ const ClasesList = ({ navigation }) => {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.filtersContainer}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <View 
+        style={[
+          styles.filtersContainer,
+          {
+            backgroundColor: colors.background,
+            borderBottomColor: colors.border,
+          }
+        ]}>
         <FilterSelector
           label="Todas las sedes"
           value={selectedSede}
@@ -201,15 +214,12 @@ const ClasesList = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
   },
   filtersContainer: {
     flexDirection: 'row',
     padding: 16,
     paddingBottom: 8,
-    backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
   },
   listContainer: {
     padding: 16,

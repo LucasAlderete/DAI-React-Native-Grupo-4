@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { authService } from '../../services/authService';
+import { ThemeContext } from '../../context/ThemeContext';
+import { lightColors, darkColors } from '../../config/colors';
 
 const VerifyCodeScreen = ({ route }) => {
   const { email } = route.params;
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const { darkMode, toggleDarkMode } = useContext(ThemeContext);
+  const colors = darkMode ? darkColors : lightColors;
 
   const handleVerify = async () => {
     if (!code.trim()) {
@@ -43,13 +48,22 @@ const VerifyCodeScreen = ({ route }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Verificar código</Text>
-      <Text style={styles.subtitle}>Hemos enviado un código a tu correo: {email}</Text>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <Text style={[styles.title, { color: colors.text }]}>Verificar código</Text>
+      
+      <Text style={[styles.subtitle, { color: colors.text }]}>Hemos enviado un código a tu correo: {email}</Text>
 
       <TextInput
-        style={styles.input}
+        style={[
+          styles.input,
+          {
+            backgroundColor: colors.card,
+            borderColor: colors.border,
+            color: colors.text,
+          }
+        ]}
         placeholder="Ingresá el código"
+        placeholderTextColor={colors.placeholder}
         keyboardType="number-pad"
         value={code}
         onChangeText={setCode}
@@ -75,10 +89,10 @@ const VerifyCodeScreen = ({ route }) => {
 export default VerifyCodeScreen;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff', justifyContent: 'center', padding: 24 },
+  container: { flex: 1, justifyContent: 'center', padding: 24 },
   title: { fontSize: 26, fontWeight: 'bold', textAlign: 'center', marginBottom: 10 },
-  subtitle: { fontSize: 15, textAlign: 'center', color: '#666', marginBottom: 25 },
-  input: { borderWidth: 1, borderColor: '#ccc', borderRadius: 8, padding: 10, fontSize: 16, textAlign: 'center' },
+  subtitle: { fontSize: 15, textAlign: 'center', marginBottom: 25 },
+  input: { borderWidth: 1, borderRadius: 8, padding: 10, fontSize: 16, textAlign: 'center' },
   button: { backgroundColor: '#007AFF', paddingVertical: 12, borderRadius: 8, marginTop: 25 },
   buttonText: { color: '#fff', textAlign: 'center', fontWeight: '600', fontSize: 16 },
   link: { marginTop: 15 },

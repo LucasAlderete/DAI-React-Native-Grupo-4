@@ -1,17 +1,29 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { authService } from '../../services/authService';
+import { ThemeContext } from '../../context/ThemeContext';
+import { lightColors, darkColors } from '../../config/colors';
 
 export default function HomeScreen({ navigation }) {
 
+  const { darkMode, toggleDarkMode } = useContext(ThemeContext);
+  const colors = darkMode ? darkColors : lightColors;
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Bienvenido a RitmoFit 🏋️‍♂️</Text>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <Text style={[styles.title, { color: colors.text }]}>Bienvenido a RitmoFit 🏋️‍♂️</Text>
 
       <TextInput
-        style={styles.input}
+        style={[
+          styles.input,
+          {
+            backgroundColor: colors.card,
+            borderColor: colors.border,
+            color: colors.text,
+          }
+        ]}
         placeholder="Buscar clase..."
-        placeholderTextColor="#aaa"
+        placeholderTextColor={colors.placeholder}
       />
 
       <TouchableOpacity 
@@ -57,24 +69,20 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f5f5f5',
     paddingHorizontal: 20,
   },
   title: {
     fontSize: 26,
     fontWeight: 'bold',
     marginBottom: 40,
-    color: '#222',
   },
   input: {
     width: '90%',
     height: 50,
-    borderColor: '#ccc',
     borderWidth: 1,
     borderRadius: 10,
     paddingHorizontal: 15,
     marginBottom: 20,
-    backgroundColor: '#fff',
     fontSize: 16,
   },
   button: {
@@ -84,9 +92,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
     marginBottom: 15,
-  },
-  profileButton: {
-    backgroundColor: '#28a745',
   },
   reservasButton: {
     backgroundColor: '#6f42c1',
