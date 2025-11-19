@@ -14,7 +14,8 @@ import ClasesList from "../components/ClasesList";
 import ClaseDetail from "../components/ClaseDetail";
 import DetalleReservaScreen from "../components/Reservas/DetalleReservaScreen";
 import CrearReservaScreen from "../components/Reservas/CrearReservaScreen";
-import HistorialScreen from "../components/Historial/HistorialScreen"
+import HistorialScreen from "../components/Historial/HistorialScreen";
+import CalificarScreen from "../components/Historial/CalificarScreen";
 
 // Tema
 import { ThemeContext } from '../context/ThemeContext';
@@ -109,6 +110,21 @@ const HistorialStack = () => {
         name="HistorialMain"
         component={HistorialScreen}
         options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Calificar"
+        component={CalificarScreen}
+        options={{ 
+          title: "Calificar Clase",
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: '#FFFFFF',
+          },
+          headerTintColor: '#2563EB',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+        }}
       />
     </Stack.Navigator>
   );
