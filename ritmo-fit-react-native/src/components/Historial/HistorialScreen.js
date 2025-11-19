@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, ActivityIndicator, TouchableOpacity, RefreshControl } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { getHistorialAsistencias, formatDateForBackend } from '../../services/historialService';
 import AsistenciaCard from './AsistenciaCard';
 import DateRangeFilter from './DateRangeFilter';
@@ -44,12 +45,28 @@ const HistorialScreen = ({ navigation }) => {
     }, [fechaInicio, fechaFin]);
 
     // ========================================
+    // EFECTO: Recargar cuando la pantalla recibe foco (vuelve de otra pantalla)
+    // ========================================
+    useFocusEffect(
+        React.useCallback(() => {
+            // Solo refrescar si no es la carga inicial
+            if (!isInitialLoad) {
+                fetchHistorial(true, false);
+            }
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+        }, [fechaInicio, fechaFin])
+    );
+
+    // ========================================
     // FUNCIONES
     // ========================================
 
-    const fetchHistorial = async (resetPage = true) => {
+    const fetchHistorial = async (resetPage = true, isRefresh = false) => {
         try {
-            setLoading(true);
+            // Solo mostrar loading completo si no es un refresh
+            if (!isRefresh) {
+                setLoading(true);
+            }
             setError(null);
 
             const filtros = {
@@ -93,8 +110,18 @@ const HistorialScreen = ({ navigation }) => {
             console.error('Error fetching historial:', err);
         } finally {
             setLoading(false);
+            if (isRefresh) {
+                setRefreshing(false);
+            }
         }
     };
+
+    // Función para manejar el pull-to-refresh
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        fetchHistorial(true, true);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [fechaInicio, fechaFin]);
 
     const handleApplyFilter = (inicio, fin) => {
         setFechaInicio(inicio);
@@ -163,9 +190,17 @@ const HistorialScreen = ({ navigation }) => {
 
             <FlatList
                 data={asistencias}
-                renderItem={({ item }) => <AsistenciaCard asistencia={item} />}
+                renderItem={({ item }) => <AsistenciaCard asistencia={item} navigation={navigation} />}
                 keyExtractor={(item) => item.id.toString()}
                 contentContainerStyle={styles.listContainer}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                        colors={['#2563EB']} 
+                        tintColor="#2563EB" 
+                    />
+                }
                 ListEmptyComponent={
                     <View style={styles.emptyContainer}>
                         <Text style={[styles.emptyText, {color: colors.textSecondary}]}>No hay asistencias registradas</Text>
