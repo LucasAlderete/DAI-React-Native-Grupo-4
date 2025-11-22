@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -13,48 +13,35 @@ import { formatearFechaLarga, extraerHora } from '../../utils/dateFormatter';
 import { cancelAllReminders } from '../../services/notificationService';
 
 export default function DetalleReservaScreen({ navigation, route }) {
-  const { reserva } = route.params;
+  const { reserva, claseId } = route.params || {};
+  const [reservaData, setReservaData] = useState(reserva || null);
+  const [loading, setLoading] = useState(!reserva);
   const [eliminando, setEliminando] = useState(false);
 
-  const clase = reserva?.clase || {};
+  // 🔹 Cargar reserva si solo vino el ID desde la notificación
+  useEffect(() => {
+    const cargarReserva = async () => {
+      if (!claseId || reserva) return; // si ya vino la reserva, no busca
+      try {
+        setLoading(true);
+        const data = await reservasService.getReservaPorClase(claseId);
+        setReservaData(data);
+      } catch (error) {
+        Alert.alert('Error', 'No se pudo cargar la reserva');
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    cargarReserva();
+  }, [claseId]);
+
+  // 🔹 Datos seguros
+  const clase = reservaData?.clase || {};
   const disciplina = clase.disciplina || {};
   const instructor = clase.instructor || {};
   const sede = clase.sede || {};
-
-  const formatearFecha = (fechaString) => {
-    if (!fechaString) return 'Fecha no disponible';
-    try {
-      const fecha = new Date(fechaString);
-      if (isNaN(fecha.getTime())) {
-        console.warn('Fecha inválida:', fechaString);
-        return 'Fecha no disponible';
-      }
-      const opciones = {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-      };
-      return fecha.toLocaleDateString('es-AR', opciones);
-    } catch (error) {
-      console.error('Error al formatear fecha:', error, fechaString);
-      return 'Fecha no disponible';
-    }
-  };
-
-  const formatearFechaCorta = (fechaString) => {
-    if (!fechaString) return 'Fecha no disponible';
-    try {
-      const fecha = new Date(fechaString);
-      if (isNaN(fecha.getTime())) return 'Fecha no disponible';
-      return fecha.toLocaleDateString('es-AR');
-    } catch (error) {
-      console.error('Error al formatear fecha:', error, fechaString);
-      return 'Fecha no disponible';
-    }
-  };
 
   const getEstadoColor = (estado) => {
     switch (estado?.toLowerCase()) {
@@ -71,58 +58,66 @@ export default function DetalleReservaScreen({ navigation, route }) {
 
   const getEstadoTexto = (estado) => estado || 'Confirmada';
 
-   const handleCancelarReserva = () => {
-      Alert.alert('Cancelar Reserva', '¿Estás seguro de que deseas cancelar esta reserva?', [
-        { text: 'No, mantener', style: 'cancel' },
-        {
-          text: 'Sí, cancelar',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              setEliminando(true);
-              await reservasService.cancelarReserva(reserva.id);
+  const handleCancelarReserva = () => {
+    Alert.alert('Cancelar Reserva', '¿Estás seguro de que deseas cancelar esta reserva?', [
+      { text: 'No, mantener', style: 'cancel' },
+      {
+        text: 'Sí, cancelar',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            setEliminando(true);
+            await reservasService.cancelarReserva(reservaData.id);
+            await cancelAllReminders();
 
-              // Cancelar todas las notificaciones locales
-              await cancelAllReminders();
-
-              Alert.alert('Reserva Cancelada', 'Tu reserva ha sido cancelada exitosamente.', [
-                { text: 'OK', onPress: () => navigation.navigate('MisReservasMain') },
-              ]);
-            } catch (error) {
-              const mensaje = error.response?.data?.message || 'No se pudo cancelar la reserva. Intenta nuevamente.';
-              Alert.alert('Error', mensaje);
-            } finally { setEliminando(false); }
-          },
+            Alert.alert('Reserva Cancelada', 'Tu reserva ha sido cancelada exitosamente.', [
+              { text: 'OK', onPress: () => navigation.navigate('MisReservasMain') },
+            ]);
+          } catch (error) {
+            const mensaje =
+              error.response?.data?.message ||
+              'No se pudo cancelar la reserva. Intenta nuevamente.';
+            Alert.alert('Error', mensaje);
+          } finally {
+            setEliminando(false);
+          }
         },
-      ]);
-    };
-
+      },
+    ]);
+  };
 
   const puedeSerCancelada = () => {
-    if (!reserva.estado || reserva.estado.toLowerCase() === 'cancelada') return false;
+    if (!reservaData?.estado || reservaData.estado.toLowerCase() === 'cancelada') return false;
     const fechaClase = new Date(clase.fechaInicio);
     const ahora = new Date();
     return fechaClase > ahora;
   };
 
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#007bff" />
+        <Text style={styles.loadingText}>Cargando reserva...</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.content}>
-        {/* Estado de la Reserva */}
+        {/* Estado */}
         <View style={styles.estadoContainer}>
           <View
             style={[
               styles.estadoBadge,
-              { backgroundColor: getEstadoColor(reserva.estado) },
+              { backgroundColor: getEstadoColor(reservaData.estado) },
             ]}
           >
-            <Text style={styles.estadoText}>
-              {getEstadoTexto(reserva.estado)}
-            </Text>
+            <Text style={styles.estadoText}>{getEstadoTexto(reservaData.estado)}</Text>
           </View>
         </View>
 
-        {/* Información de la Clase */}
+        {/* Clase */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>📚 Clase</Text>
           <View style={styles.card}>
@@ -136,7 +131,7 @@ export default function DetalleReservaScreen({ navigation, route }) {
           </View>
         </View>
 
-        {/* Información del Instructor */}
+        {/* Instructor */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>👤 Instructor</Text>
           <View style={styles.card}>
@@ -152,7 +147,7 @@ export default function DetalleReservaScreen({ navigation, route }) {
           </View>
         </View>
 
-        {/* Información de la Sede */}
+        {/* Sede */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>📍 Sede</Text>
           <View style={styles.card}>
@@ -164,7 +159,7 @@ export default function DetalleReservaScreen({ navigation, route }) {
           </View>
         </View>
 
-        {/* Fecha y Hora */}
+        {/* Fecha */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>🗓️ Fecha y Hora</Text>
           <View style={styles.card}>
@@ -192,20 +187,20 @@ export default function DetalleReservaScreen({ navigation, route }) {
           </View>
         )}
 
-        {/* Información de la Reserva */}
+        {/* Info reserva */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>📋 Información de Reserva</Text>
           <View style={styles.card}>
-            <Text style={styles.infoSecondaryText}>ID de Reserva: #{reserva.id}</Text>
-            {reserva.fechaReserva && (
+            <Text style={styles.infoSecondaryText}>ID de Reserva: #{reservaData.id}</Text>
+            {reservaData.fechaReserva && (
               <Text style={styles.infoSecondaryText}>
-                Reservado el: {formatearFechaCorta(reserva.fechaReserva)}
+                Reservado el: {new Date(reservaData.fechaReserva).toLocaleDateString('es-AR')}
               </Text>
             )}
           </View>
         </View>
 
-        {/* Botón Cancelar */}
+        {/* Cancelar */}
         {puedeSerCancelada() && (
           <TouchableOpacity
             style={styles.cancelarButton}
@@ -219,20 +214,6 @@ export default function DetalleReservaScreen({ navigation, route }) {
             )}
           </TouchableOpacity>
         )}
-
-        {!puedeSerCancelada() && reserva.estado?.toLowerCase() === 'cancelada' && (
-          <View style={styles.infoBox}>
-            <Text style={styles.infoBoxText}>ℹ️ Esta reserva ya fue cancelada</Text>
-          </View>
-        )}
-
-        {!puedeSerCancelada() && reserva.estado?.toLowerCase() !== 'cancelada' && (
-          <View style={styles.infoBox}>
-            <Text style={styles.infoBoxText}>
-              ℹ️ No se puede cancelar esta reserva porque la clase ya pasó
-            </Text>
-          </View>
-        )}
       </ScrollView>
     </View>
   );
@@ -240,6 +221,8 @@ export default function DetalleReservaScreen({ navigation, route }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#f5f5f5' },
+  loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  loadingText: { marginTop: 10, fontSize: 16, color: '#555' },
   scrollView: { flex: 1 },
   content: { padding: 20, paddingBottom: 40 },
   estadoContainer: { alignItems: 'center', marginBottom: 20 },
@@ -267,20 +250,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: 'center',
     marginTop: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 4,
   },
   cancelarButtonText: { color: '#fff', fontSize: 16, fontWeight: '600' },
-  infoBox: {
-    backgroundColor: '#e7f3ff',
-    borderLeftWidth: 4,
-    borderLeftColor: '#007bff',
-    borderRadius: 8,
-    padding: 16,
-    marginTop: 10,
-  },
-  infoBoxText: { fontSize: 14, color: '#004085', lineHeight: 20 },
 });

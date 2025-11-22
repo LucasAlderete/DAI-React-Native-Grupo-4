@@ -13,7 +13,8 @@ import {
 import { getClases } from '../../services/ClasesService';
 import reservasService from '../../services/reservasService';
 import { extraerHora } from '../../utils/dateFormatter';
-import { scheduleClassReminder } from '../../services/notificationService'; // 🆕 Import agregado
+import { notifyReservationCreated, scheduleClassReminder } from '../../services/notificationService';
+import { Logger } from '../../utils/Logger';
 
 export default function CrearReservaScreen({ navigation }) {
   const [clases, setClases] = useState([]);
@@ -45,35 +46,28 @@ export default function CrearReservaScreen({ navigation }) {
   };
 
   const handleReservar = async (claseId, nombreClase) => {
-      Alert.alert('Confirmar Reserva', `¿Deseas reservar la clase "${nombreClase}"?`, [
-        { text: 'Cancelar', style: 'cancel' },
-        {
-          text: 'Confirmar',
-          onPress: async () => {
-            try {
-              setReservando(true);
-              await reservasService.crearReserva(claseId);
+    Logger.info("Reserva", "Intentando crear reserva para clase:", claseId);
 
-              const clase = clases.find(c => c.id === claseId);
-              if (clase) {
-                // Caso 1: Notificación inmediata
-                await notifyReservationCreated(clase);
-                // Caso 2: Recordatorio 1h antes
-                await scheduleClassReminder(clase);
-              }
+    try {
+      setReservando(true);
+      const response = await reservasService.crearReserva(claseId);
+      Logger.success("Reserva", "Reserva creada correctamente:", response);
 
-              Alert.alert('Éxito', '¡Reserva creada exitosamente!', [
-                { text: 'Ver mis reservas', onPress: () => navigation.navigate('MisReservasMain') },
-                { text: 'OK', onPress: () => navigation.goBack() },
-              ]);
-            } catch (error) {
-              const mensaje = error.response?.data?.message || 'No se pudo crear la reserva. Intenta nuevamente.';
-              Alert.alert('Error', mensaje);
-            } finally { setReservando(false); }
-          },
-        },
-      ]);
-    };
+      const clase = clases.find(c => c.id === claseId);
+      if (clase) {
+        await notifyReservationCreated(clase);
+        await scheduleClassReminder(clase);
+      }
+
+      Alert.alert('Éxito', '¡Reserva creada exitosamente!');
+    } catch (error) {
+      Logger.error("Reserva", error, "al crear reserva");
+      const mensaje = error.response?.data?.message || 'No se pudo crear la reserva.';
+      Alert.alert('Error', mensaje);
+    } finally {
+      setReservando(false);
+    }
+  };
 
   const formatearFecha = (fechaString) => {
     if (!fechaString) return 'Fecha no disponible';

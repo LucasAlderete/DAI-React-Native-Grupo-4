@@ -5,8 +5,8 @@ import RootNavigator from './src/navigation/RootNavigator';
 import { ThemeProvider } from './src/context/ThemeContext';
 import { requestNotificationPermission } from './src/services/notificationService';
 import './src/services/backgroundService';
+import { navigationRef } from './src/navigation/RootNavigation'; // 👈 NUEVO
 
-// ✅ Solo una definición de App()
 export default function App() {
   React.useEffect(() => {
     requestNotificationPermission();
@@ -15,7 +15,7 @@ export default function App() {
   return (
     <ThemeProvider>
       <SafeAreaProvider>
-        <NavigationContainer>
+        <NavigationContainer ref={navigationRef}> {/* 👈 IMPORTANTE */}
           <RootNavigator />
         </NavigationContainer>
       </SafeAreaProvider>
