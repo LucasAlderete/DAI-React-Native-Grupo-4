@@ -5,9 +5,9 @@
 const API_CONFIG = {
   // Cambia esta IP por la de tu máquina cuando sea necesario
   // Para obtener tu IP: ipconfig (Windows) o ifconfig (Mac/Linux)
-  BASE_URL: 'http://192.168.0.31:8080/api',
-  HOST: 'http://192.168.0.31:8080',
-  
+  BASE_URL: 'http://192.168.0.62:8080/api',
+  HOST: 'http://192.168.0.62:8080',
+
   // Alternativas comunes:
   // - Android Emulator: 'http://10.0.2.2:8080/api'
   // - iOS Simulator: 'http://localhost:8080/api'

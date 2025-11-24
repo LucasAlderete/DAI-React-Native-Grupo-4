@@ -7,6 +7,7 @@ import {
   ScrollView,
   Alert,
   ActivityIndicator,
+  Linking,
 } from 'react-native';
 import reservasService from '../../services/reservasService';
 import { formatearFechaLarga, extraerHora } from '../../utils/dateFormatter';
@@ -132,6 +133,13 @@ export default function DetalleReservaScreen({ navigation, route }) {
     return fechaClase > ahora;
   };
 
+  const openMaps = () => {
+      const query = encodeURIComponent(clase.sede.direccion);
+      const url = `https://www.google.com/maps/search/?api=1&query=${query}`;
+      Linking.openURL(url);
+      // ej https://www.google.com/maps/search/?api=1&query=Av.%20Corrientes%201234%2C%20CABA
+  }
+
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.content}>
@@ -189,11 +197,16 @@ export default function DetalleReservaScreen({ navigation, route }) {
           <View style={styles.card}>
             <Text style={styles.infoText}>{sede.nombre || 'No disponible'}</Text>
             {sede.direccion && (
-              <Text style={styles.infoSecondaryText}>{sede.direccion}</Text>
+              <>
+                <Text style={styles.infoSecondaryText}>{sede.direccion}</Text>
+
+                <Text style={styles.linkText} onPress={openMaps}>🧭 Como llegar</Text>
+              </>
             )}
             {sede.telefono && (
               <Text style={styles.infoSecondaryText}>📞 {sede.telefono}</Text>
             )}
+            
           </View>
         </View>
 
@@ -342,6 +355,11 @@ const styles = StyleSheet.create({
     color: '#666',
     marginTop: 4,
   },
+  linkText: {
+    fontSize: 14,
+    color: '#2563EB',
+    marginTop: 4,
+  },
   cancelarButton: {
     backgroundColor: '#dc3545',
     paddingVertical: 16,
@@ -372,5 +390,7 @@ const styles = StyleSheet.create({
     color: '#004085',
     lineHeight: 20,
   },
+  
+
 });
 

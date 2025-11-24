@@ -27,6 +27,7 @@ const ProfileScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [fotoUri, setFotoUri] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const { darkMode, toggleDarkMode } = useContext(ThemeContext);
   const colors = darkMode ? darkColors : lightColors;
@@ -36,20 +37,18 @@ const ProfileScreen = ({ navigation }) => {
   }, []);
 
   const fetchPerfil = async () => {
-    setLoading(true);
     try {
+      setLoading(true);
       const data = await getUsuario();
       if (!data) throw new Error('Datos vacíos');
-
       setUsuario(data);
       setNombre(data.nombre || '');
       setEmail(data.email || '');
-
       setFotoUri(getFullFotoUrl(data.fotoUrl));
-
-    } catch (error) {
-      console.log('Error al cargar perfil:', error);
-      Alert.alert('Error', 'No se pudo cargar el perfil.');
+      setError(null);
+    } catch (err) {
+      setError("Error al cargar el perfil");
+      console.error("Error fetching profile:", err);
     } finally {
       setLoading(false);
     }
@@ -133,6 +132,17 @@ const ProfileScreen = ({ navigation }) => {
       <View style={styles.centered}>
         <ActivityIndicator size="large" color="#2563EB" />
         <Text style={styles.loadingText}>Cargando perfil...</Text>
+      </View>
+    );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.centered}>
+        <Text style={styles.errorText}>{error}</Text>
+        <TouchableOpacity styles={styles.retryButton} onPress={fetchPerfil}>
+          <Text style={styles.retryButtonText}>Reintentar</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -287,6 +297,24 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#6B7280',
   },
+  errorText: {
+    color: '#DC2626',
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 16,
+  },
+  retryButton: {
+    backgroundColor: '#2563EB',
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 8,
+  },
+  retryButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
 });
 
 export default ProfileScreen;
+

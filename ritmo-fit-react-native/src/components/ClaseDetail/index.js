@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   ScrollView,
+  Linking,
 } from 'react-native';
 import { getClaseById } from '../../services/ClasesService';
 
@@ -65,6 +66,12 @@ const ClaseDetail = ({ route, navigation }) => {
     // TODO: Implementar lógica de reserva
     console.log('Reservar clase:', claseId);
   };
+
+  const openMaps = () => {
+    const query = encodeURIComponent(clase.sede.direccion);
+    const url = `https://www.google.com/maps/search/?api=1&query=${query}`;
+    Linking.openURL(url);
+  }
 
   if (loading) {
     return (
@@ -136,6 +143,10 @@ const ClaseDetail = ({ route, navigation }) => {
           label="Dirección:"
           value={clase.sede.direccion}
         />
+
+        <TouchableOpacity style={styles.comoLlegarButton} onPress={openMaps}>
+          <Text style={styles.comoLlegarText}>🧭 Como llegar</Text>
+        </TouchableOpacity>
       </View>
 
       <TouchableOpacity
@@ -234,6 +245,18 @@ const styles = StyleSheet.create({
     color: '#1F2937',
     textAlign: 'right',
     flex: 1,
+  },
+  comoLlegarButton: {
+    marginTop: 8,
+    backgroundColor: '#2563EB',
+    paddingVertical: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  comoLlegarText: {
+    color: 'white',
+    fontSize: 15,
+    fontWeight: 'bold',
   },
   reservarButton: {
     backgroundColor: '#FFFFFF',
