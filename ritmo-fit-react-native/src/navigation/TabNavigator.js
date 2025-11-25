@@ -133,7 +133,7 @@ const HistorialStack = () => {
 const TabNavigator = () => {
   const insets = useSafeAreaInsets();
 
-  const { darkMode, toggleDarkMode } = useContext(ThemeContext);
+  const { darkMode } = useContext(ThemeContext);
   const colors = darkMode ? darkColors : lightColors;
   
   return (

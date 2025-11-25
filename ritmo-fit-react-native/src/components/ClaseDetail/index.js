@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -9,12 +9,17 @@ import {
   Linking,
 } from 'react-native';
 import { getClaseById } from '../../services/ClasesService';
+import { ThemeContext } from '../../context/ThemeContext';
+import { lightColors, darkColors } from '../../config/colors';
 
 const ClaseDetail = ({ route, navigation }) => {
   const { claseId } = route.params;
   const [clase, setClase] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const { darkMode } = useContext(ThemeContext);
+  const colors = darkMode ? darkColors : lightColors;
 
   useEffect(() => {
     fetchClaseDetail();
@@ -97,15 +102,15 @@ const ClaseDetail = ({ route, navigation }) => {
     <View style={styles.infoRow}>
       <View style={styles.infoLeft}>
         <Text style={styles.infoIcon}>{icon}</Text>
-        <Text style={styles.infoLabel}>{label}</Text>
+        <Text style={[styles.infoLabel, { color: colors.text }]}>{label}</Text>
       </View>
-      <Text style={styles.infoValue}>{value}</Text>
+      <Text style={[styles.infoValue, { color: colors.textSecondary }]}>{value}</Text>
     </View>
   );
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-      <View style={styles.card}>
+    <ScrollView style={[styles.container, { backgroundColor: colors.background }]} contentContainerStyle={styles.contentContainer}>
+      <View style={[styles.card, { backgroundColor: colors.card , borderColor: colors.border }]}>
         <Text style={styles.disciplineName}>{clase.disciplina.nombre}</Text>
 
         <InfoRow
@@ -152,7 +157,8 @@ const ClaseDetail = ({ route, navigation }) => {
       <TouchableOpacity
         style={[
           styles.reservarButton,
-          !clase.disponible && styles.reservarButtonDisabled
+          !clase.disponible && styles.reservarButtonDisabled,
+          { color: colors.background }
         ]}
         onPress={handleReservar}
         disabled={!clase.disponible}
@@ -168,7 +174,6 @@ const ClaseDetail = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
   },
   contentContainer: {
     padding: 16,
@@ -203,7 +208,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   card: {
-    backgroundColor: '#EFF6FF',
+    borderWidth: 1,
     borderRadius: 12,
     padding: 20,
     marginBottom: 20,
@@ -237,12 +242,10 @@ const styles = StyleSheet.create({
   },
   infoLabel: {
     fontSize: 15,
-    color: '#374151',
     fontWeight: '500',
   },
   infoValue: {
     fontSize: 15,
-    color: '#1F2937',
     textAlign: 'right',
     flex: 1,
   },
@@ -259,7 +262,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   reservarButton: {
-    backgroundColor: '#FFFFFF',
     paddingVertical: 16,
     borderRadius: 30,
     alignItems: 'center',

@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 import { Calendar } from 'react-native-calendars';
+import { ThemeContext } from '../../context/ThemeContext';
+import { lightColors, darkColors } from '../../config/colors';
 
 const DateRangeFilter = ({ fechaInicio, fechaFin, onApplyFilter, onClearFilter }) => {
     const [showModal, setShowModal] = useState(false);
     const [selectingType, setSelectingType] = useState(null);
     const [tempFechaInicio, setTempFechaInicio] = useState(fechaInicio);
     const [tempFechaFin, setTempFechaFin] = useState(fechaFin);
+
+    const { darkMode } = useContext(ThemeContext);
+    const colors = darkMode ? darkColors : lightColors;
 
     const formatDisplayDate = (date) => {
         if (!date) return 'Seleccionar';
@@ -68,29 +73,37 @@ const DateRangeFilter = ({ fechaInicio, fechaFin, onApplyFilter, onClearFilter }
     const hasFilters = tempFechaInicio || tempFechaFin;
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Filtrar por fecha</Text>
+        <View style={[styles.container, { backgroundColor: colors.card, borderColor: colors.border }]}>
+            <Text style={[styles.title, { color: colors.text }]}>Filtrar por fecha</Text>
 
             <View style={styles.dateSelectorsRow}>
                 <View style={styles.dateSelector}>
-                    <Text style={styles.label}>Desde</Text>
+                    <Text style={[styles.label, { color: colors.textSecondary }]}>Desde</Text>
                     <TouchableOpacity
-                        style={styles.dateButton}
+                        style={[styles.dateButton, { backgroundColor: colors.card, borderColor: colors.border }]}
                         onPress={() => openDatePicker('inicio')}
                     >
-                        <Text style={[styles.dateButtonText, tempFechaInicio && styles.dateButtonTextSelected]}>
+                        <Text style={[
+                            styles.dateButtonText, 
+                            tempFechaInicio && styles.dateButtonTextSelected,
+                            {color: colors.textSecondary}
+                            ]}>
                             {formatDisplayDate(tempFechaInicio)}
                         </Text>
                     </TouchableOpacity>
                 </View>
 
                 <View style={styles.dateSelector}>
-                    <Text style={styles.label}>Hasta</Text>
+                    <Text style={[styles.label, { color: colors.textSecondary }]}>Hasta</Text>
                     <TouchableOpacity
-                        style={styles.dateButton}
+                        style={[styles.dateButton, { backgroundColor: colors.card, borderColor: colors.border}]}
                         onPress={() => openDatePicker('fin')}
                     >
-                        <Text style={[styles.dateButtonText, tempFechaFin && styles.dateButtonTextSelected]}>
+                        <Text style={[
+                            styles.dateButtonText, 
+                            tempFechaFin && styles.dateButtonTextSelected,
+                            {color: colors.textSecondary}
+                            ]}>
                             {formatDisplayDate(tempFechaFin)}
                         </Text>
                     </TouchableOpacity>
@@ -163,7 +176,7 @@ const DateRangeFilter = ({ fechaInicio, fechaFin, onApplyFilter, onClearFilter }
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#FFFFFF',
+        borderWidth: 1,
         padding: 16,
         marginHorizontal: 16,
         marginVertical: 12,
@@ -177,7 +190,6 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 16,
         fontWeight: '600',
-        color: '#1F2937',
         marginBottom: 12,
     },
     dateSelectorsRow: {
@@ -190,20 +202,16 @@ const styles = StyleSheet.create({
     },
     label: {
         fontSize: 14,
-        color: '#6B7280',
         marginBottom: 6,
         fontWeight: '500',
     },
     dateButton: {
-        backgroundColor: '#F3F4F6',
         padding: 12,
         borderRadius: 8,
         borderWidth: 1,
-        borderColor: '#E5E7EB',
     },
     dateButtonText: {
         fontSize: 14,
-        color: '#9CA3AF',
         textAlign: 'center',
     },
     dateButtonTextSelected: {

@@ -6,7 +6,7 @@ import { lightColors, darkColors } from '../../config/colors';
 
 export default function BiometricUnlockScreen({ navigation }) {
 
-  const { darkMode, toggleDarkMode } = useContext(ThemeContext);
+  const { darkMode } = useContext(ThemeContext);
   const colors = darkMode ? darkColors : lightColors;
 
   useEffect(() => {

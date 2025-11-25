@@ -10,7 +10,7 @@ export default function RegisterScreen({ navigation }) {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const { darkMode, toggleDarkMode } = useContext(ThemeContext);
+  const { darkMode } = useContext(ThemeContext);
   const colors = darkMode ? darkColors : lightColors;
 
   const handleRegister = async () => {

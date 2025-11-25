@@ -35,7 +35,7 @@ const ClasesList = ({ navigation }) => {
   const [disciplinaModalVisible, setDisciplinaModalVisible] = useState(false);
   const [fechaModalVisible, setFechaModalVisible] = useState(false);
 
-  const { darkMode, toggleDarkMode } = useContext(ThemeContext);
+  const { darkMode } = useContext(ThemeContext);
   const colors = darkMode ? darkColors : lightColors;
 
   useEffect(() => {

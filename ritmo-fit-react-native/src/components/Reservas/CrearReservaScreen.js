@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -13,6 +13,8 @@ import {
 import { getClases } from '../../services/ClasesService';
 import reservasService from '../../services/reservasService';
 import { extraerHora } from '../../utils/dateFormatter';
+import { ThemeContext } from '../../context/ThemeContext';
+import { lightColors, darkColors } from '../../config/colors';
 
 export default function CrearReservaScreen({ navigation }) {
   const [clases, setClases] = useState([]);
@@ -20,6 +22,9 @@ export default function CrearReservaScreen({ navigation }) {
   const [refreshing, setRefreshing] = useState(false);
   const [reservando, setReservando] = useState(false);
   const [searchText, setSearchText] = useState('');
+
+  const { darkMode } = useContext(ThemeContext);
+  const colors = darkMode ? darkColors : lightColors;
 
   useEffect(() => {
     cargarClases();
@@ -161,11 +166,11 @@ export default function CrearReservaScreen({ navigation }) {
     const hayLugar = lugaresDisponibles > 0;
 
     return (
-      <View style={styles.claseCard}>
+      <View style={[styles.claseCard, {backgroundColor: colors.card, borderColor: colors.border}]}>
         <View style={styles.cardHeader}>
           <View style={styles.headerLeft}>
-            <Text style={styles.disciplinaText}>{item.nombre || disciplina.nombre || 'Clase'}</Text>
-            <Text style={styles.instructorText}>
+            <Text style={[styles.disciplinaText, {color: colors.text}]}>{item.nombre || disciplina.nombre || 'Clase'}</Text>
+            <Text style={[styles.instructorText, {color: colors.textSecondary}]}>
               👤 {instructor.nombre} {instructor.apellido || ''}
             </Text>
           </View>
@@ -182,28 +187,28 @@ export default function CrearReservaScreen({ navigation }) {
         </View>
 
         <View style={styles.cardBody}>
-          <Text style={styles.sedeText}>📍 {sede.nombre || 'Sede'}</Text>
-          <Text style={styles.direccionText}>
+          <Text style={[styles.sedeText, {color: colors.textSecondary}]}>📍 {sede.nombre || 'Sede'}</Text>
+          <Text style={[styles.direccionText, {color: colors.textSecondary}]}>
             {sede.direccion || 'Dirección no disponible'}
           </Text>
-          <Text style={styles.fechaText}>
+          <Text style={[styles.fechaText, {color: colors.textSecondary}]}>
             🗓️ {formatearFecha(item.fechaInicio)}
           </Text>
           {item.fechaInicio && item.fechaFin && (
-            <Text style={styles.duracionText}>
+            <Text style={[styles.duracionText, {color: colors.textSecondary}]}>
               ⏱️ {extraerHora(item.fechaInicio)} - {extraerHora(item.fechaFin)}
             </Text>
           )}
           {disciplina.descripcion && (
-            <Text style={styles.descripcionText} numberOfLines={2}>
+            <Text style={[styles.descripcionText, {color: colors.textSecondary}]} numberOfLines={2}>
               {disciplina.descripcion}
             </Text>
           )}
         </View>
 
-        <View style={styles.cardFooter}>
+        <View style={[styles.cardFooter, {borderTopColor: colors.border}]}>
           <View>
-            <Text style={styles.lugaresText}>
+            <Text style={[styles.lugaresText, {color: colors.textSecondary}]}>
               {hayLugar
                 ? `${lugaresDisponibles} lugar${lugaresDisponibles !== 1 ? 'es' : ''} disponible${lugaresDisponibles !== 1 ? 's' : ''}`
                 : 'Sin lugares disponibles'}
@@ -240,7 +245,7 @@ export default function CrearReservaScreen({ navigation }) {
 
   if (loading) {
     return (
-      <View style={styles.loadingContainer}>
+      <View style={[styles.loadingContainer, {backgroundColor: colors.background}]}>
         <ActivityIndicator size="large" color="#007bff" />
         <Text style={styles.loadingText}>Cargando clases...</Text>
       </View>
@@ -248,12 +253,12 @@ export default function CrearReservaScreen({ navigation }) {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.searchContainer}>
+    <View style={[styles.container, {backgroundColor: colors.background}]}>
+      <View style={[styles.searchContainer, {backgroundColor: colors.background, borderBottomColor: colors.border}]}>
         <TextInput
-          style={styles.searchInput}
+          style={[styles.searchInput, {backgroundColor: colors.card, borderColor: colors.border}]}
           placeholder="Buscar por disciplina, instructor o sede..."
-          placeholderTextColor="#999"
+          placeholderTextColor= {colors.placeholder}
           value={searchText}
           onChangeText={setSearchText}
         />
@@ -285,27 +290,22 @@ export default function CrearReservaScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
   },
   searchContainer: {
     padding: 15,
-    backgroundColor: '#fff',
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
   },
   searchInput: {
-    backgroundColor: '#f5f5f5',
+    borderWidth: 1,
     borderRadius: 10,
     paddingHorizontal: 15,
     paddingVertical: 12,
     fontSize: 16,
-    color: '#222',
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f5f5f5',
   },
   loadingText: {
     marginTop: 10,
@@ -319,7 +319,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   claseCard: {
-    backgroundColor: '#fff',
+    borderWidth: 1,
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -341,12 +341,10 @@ const styles = StyleSheet.create({
   disciplinaText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#222',
     marginBottom: 4,
   },
   instructorText: {
     fontSize: 14,
-    color: '#666',
   },
   capacidadBadge: {
     paddingHorizontal: 12,
@@ -364,29 +362,24 @@ const styles = StyleSheet.create({
   },
   sedeText: {
     fontSize: 15,
-    color: '#444',
     marginBottom: 4,
     fontWeight: '600',
   },
   direccionText: {
     fontSize: 13,
-    color: '#888',
     marginBottom: 8,
     marginLeft: 20,
   },
   fechaText: {
     fontSize: 14,
-    color: '#666',
     marginBottom: 6,
   },
   duracionText: {
     fontSize: 14,
-    color: '#666',
     marginBottom: 6,
   },
   descripcionText: {
     fontSize: 13,
-    color: '#888',
     fontStyle: 'italic',
     marginTop: 6,
   },
@@ -395,12 +388,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     borderTopWidth: 1,
-    borderTopColor: '#f0f0f0',
     paddingTop: 12,
   },
   lugaresText: {
     fontSize: 14,
-    color: '#666',
   },
   reservarButton: {
     backgroundColor: '#007bff',

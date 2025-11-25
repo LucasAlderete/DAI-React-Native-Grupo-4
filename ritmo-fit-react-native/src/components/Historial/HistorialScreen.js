@@ -22,7 +22,7 @@ const HistorialScreen = ({ navigation }) => {
     const [fechaFin, setFechaFin] = useState(null);
     const [isInitialLoad, setIsInitialLoad] = useState(true);
 
-    const { darkMode, toggleDarkMode } = useContext(ThemeContext);
+    const { darkMode } = useContext(ThemeContext);
     const colors = darkMode ? darkColors : lightColors;
 
     // ========================================
@@ -175,9 +175,6 @@ const HistorialScreen = ({ navigation }) => {
                 },
             ]}
             >
-                <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Text style={styles.backButton}>← Volver</Text>
-                </TouchableOpacity>
                 <Text style={[styles.title, { color: colors.text }]}>Historial de asistencias</Text>
             </View>
 
@@ -228,11 +225,6 @@ const styles = StyleSheet.create({
         padding: 16,
         paddingTop: 50,
         borderBottomWidth: 1,
-    },
-    backButton: {
-        fontSize: 16,
-        color: '#2563EB',
-        marginBottom: 8,
     },
     title: {
         fontSize: 24,

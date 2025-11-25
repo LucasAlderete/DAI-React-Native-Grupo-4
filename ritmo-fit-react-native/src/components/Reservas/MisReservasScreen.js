@@ -22,7 +22,7 @@ export default function MisReservasScreen({ navigation }) {
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
 
-  const { darkMode, toggleDarkMode } = useContext(ThemeContext);
+  const { darkMode } = useContext(ThemeContext);
   const colors = darkMode ? darkColors : lightColors;
 
   const cargarReservas = async (pageNum = 0, isRefreshing = false) => {
@@ -128,11 +128,11 @@ export default function MisReservasScreen({ navigation }) {
 
     return (
       <TouchableOpacity
-        style={styles.reservaCard}
+        style={[styles.reservaCard, {backgroundColor: colors.card, borderColor: colors.border}]}
         onPress={() => navigation.navigate('DetalleReserva', { reserva: item })}
       >
         <View style={styles.cardHeader}>
-          <Text style={styles.disciplinaText}>{clase.nombre || disciplina.nombre || 'Clase'}</Text>
+          <Text style={[styles.disciplinaText, {color: colors.text}]}>{clase.nombre || disciplina.nombre || 'Clase'}</Text>
           <View
             style={[
               styles.estadoBadge,
@@ -146,21 +146,21 @@ export default function MisReservasScreen({ navigation }) {
         </View>
 
         <View style={styles.cardBody}>
-          <Text style={styles.instructorText}>
+          <Text style={[styles.instructorText, {color: colors.textSecondary}]}>
             👤 {instructor.nombre} {instructor.apellido || ''}
           </Text>
-          <Text style={styles.sedeText}>📍 {sede.nombre || 'Sede'}</Text>
-          <Text style={styles.fechaText}>
+          <Text style={[styles.sedeText, {color: colors.textSecondary}]}>📍 {sede.nombre || 'Sede'}</Text>
+          <Text style={[styles.fechaText, {color: colors.textSecondary}]}>
             🗓️ {formatearFecha(clase.fechaInicio)}
           </Text>
           {clase.fechaInicio && clase.fechaFin && (
-            <Text style={styles.duracionText}>
+            <Text style={[styles.duracionText, {color: colors.textSecondary}]}>
               ⏱️ {extraerHora(clase.fechaInicio)} - {extraerHora(clase.fechaFin)}
             </Text>
           )}
         </View>
 
-        <View style={styles.cardFooter}>
+        <View style={[styles.cardFooter, {borderTopColor: colors.border}]}>
           <Text style={styles.verDetalleText}>Ver detalle →</Text>
         </View>
       </TouchableOpacity>
@@ -252,14 +252,6 @@ const styles = StyleSheet.create({
     paddingTop: 50,
     borderBottomWidth: 1,
   },
-  backButton: {
-    padding: 5,
-  },
-  backButtonText: {
-    fontSize: 16,
-    color: '#007bff',
-    fontWeight: '600',
-  },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
@@ -293,7 +285,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   reservaCard: {
-    backgroundColor: '#fff',
+    borderWidth: 1,
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -312,7 +304,6 @@ const styles = StyleSheet.create({
   disciplinaText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#222',
     flex: 1,
   },
   estadoBadge: {
@@ -330,26 +321,21 @@ const styles = StyleSheet.create({
   },
   instructorText: {
     fontSize: 15,
-    color: '#444',
     marginBottom: 6,
   },
   sedeText: {
     fontSize: 14,
-    color: '#666',
     marginBottom: 6,
   },
   fechaText: {
     fontSize: 14,
-    color: '#666',
     marginBottom: 6,
   },
   duracionText: {
     fontSize: 14,
-    color: '#666',
   },
   cardFooter: {
     borderTopWidth: 1,
-    borderTopColor: '#f0f0f0',
     paddingTop: 10,
     alignItems: 'flex-end',
   },

@@ -7,7 +7,7 @@ import { lightColors, darkColors } from '../../config/colors';
 export default function ForgotPasswordScreen({ navigation }) {
   const [email, setEmail] = useState('');
 
-  const { darkMode, toggleDarkMode } = useContext(ThemeContext);
+  const { darkMode } = useContext(ThemeContext);
   const colors = darkMode ? darkColors : lightColors;
 
   const handleSend = async () => {

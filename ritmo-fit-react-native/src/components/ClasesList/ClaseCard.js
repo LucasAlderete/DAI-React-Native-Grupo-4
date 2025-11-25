@@ -1,32 +1,40 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
+import { ThemeContext } from '../../context/ThemeContext';
+import { lightColors, darkColors } from '../../config/colors';
 
-const ClaseCard = ({ clase, onPress, formatDate }) => (
-  <TouchableOpacity style={styles.card} onPress={onPress}>
-    <Text style={styles.disciplineName}>{clase.disciplina.nombre}</Text>
-    
-    <View style={styles.infoRow}>
-      <Text style={styles.icon}>📅</Text>
-      <Text style={styles.infoText}>{formatDate(clase.fechaInicio)}</Text>
-    </View>
-    
-    <View style={styles.infoRow}>
-      <Text style={styles.icon}>👤</Text>
-      <Text style={styles.infoText}>
-        Instructor: {clase.instructor.nombre} {clase.instructor.apellido}
-      </Text>
-    </View>
-    
-    <View style={styles.infoRow}>
-      <Text style={styles.icon}>📍</Text>
-      <Text style={styles.infoText}>Sede: {clase.sede.nombre}</Text>
-    </View>
-  </TouchableOpacity>
-);
+const ClaseCard = ({ clase, onPress, formatDate }) => {
+
+  const { darkMode } = useContext(ThemeContext);
+  const colors = darkMode ? darkColors : lightColors;
+  
+  return (
+    <TouchableOpacity style={[styles.card, { backgroundColor: colors.card, borderColor: colors.border }]} onPress={onPress}>
+      <Text style={styles.disciplineName}>{clase.disciplina.nombre}</Text>
+      
+      <View style={styles.infoRow}>
+        <Text style={styles.icon}>📅</Text>
+        <Text style={[styles.infoText, { color: colors.text }]}>{formatDate(clase.fechaInicio)}</Text>
+      </View>
+      
+      <View style={styles.infoRow}>
+        <Text style={styles.icon}>👤</Text>
+        <Text style={[styles.infoText, { color: colors.text }]}>
+          Instructor: {clase.instructor.nombre} {clase.instructor.apellido}
+        </Text>
+      </View>
+      
+      <View style={styles.infoRow}>
+        <Text style={styles.icon}>📍</Text>
+        <Text style={[styles.infoText, { color: colors.text }]}>Sede: {clase.sede.nombre}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+};
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#EFF6FF',
+    borderWidth: 1,
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
@@ -54,7 +62,6 @@ const styles = StyleSheet.create({
   },
   infoText: {
     fontSize: 14,
-    color: '#374151',
     flex: 1,
   },
 });

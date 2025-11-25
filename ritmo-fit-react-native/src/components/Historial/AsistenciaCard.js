@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { parseApiDate } from '../../services/dateUtils';
+import { ThemeContext } from '../../context/ThemeContext';
+import { lightColors, darkColors } from '../../config/colors';
 
 /**
  * Componente que muestra una tarjeta de asistencia individual
@@ -11,6 +13,9 @@ import { parseApiDate } from '../../services/dateUtils';
  * - clase.sede.nombre (sede está dentro de clase)
  */
 const AsistenciaCard = ({ asistencia, navigation }) => {
+    const { darkMode } = useContext(ThemeContext);
+    const colors = darkMode ? darkColors : lightColors;
+
     // Validación: Si no hay asistencia, no renderizar nada
     if (!asistencia) {
         console.warn('⚠️ AsistenciaCard recibió asistencia undefined');
@@ -53,27 +58,27 @@ const AsistenciaCard = ({ asistencia, navigation }) => {
     const sedeNombre = asistencia.clase?.sede?.nombre || 'Sede no especificada';
 
     return (
-        <View style={styles.card}>
+        <View style={[styles.card, {backgroundColor: colors.card, borderColor: colors.border}]}>
             {/* Fecha de la asistencia */}
-            <Text style={styles.fecha}>
+            <Text style={[styles.fecha, {color: colors.text}]}>
                 {formatFecha(fecha)}
             </Text>
 
             {/* Nombre de la clase */}
-            <Text style={styles.clase}>
+            <Text style={[styles.clase, {color: colors.text}]}>
                 {claseNombre}
             </Text>
 
             {/* Información de sede */}
             <View style={styles.infoRow}>
-                <Text style={styles.label}>Sede:</Text>
-                <Text style={styles.value}>{sedeNombre}</Text>
+                <Text style={[styles.label, {color: colors.text}]}>Sede:</Text>
+                <Text style={[styles.value, {color: colors.textSecondary}]}>{sedeNombre}</Text>
             </View>
 
             {/* Duración */}
             <View style={styles.infoRow}>
-                <Text style={styles.label}>Duración:</Text>
-                <Text style={styles.value}>
+                <Text style={[styles.label, {color: colors.text}]}>Duración:</Text>
+                <Text style={[styles.value, {color: colors.textSecondary}]}>
                     {duracion ? `${duracion} minutos` : 'No especificada'}
                 </Text>
             </View>
@@ -92,7 +97,7 @@ const AsistenciaCard = ({ asistencia, navigation }) => {
             {asistencia.comentario && (
                 <View style={styles.comentarioContainer}>
                     <Text style={styles.label}>Comentario:</Text>
-                    <Text style={styles.comentario}>{asistencia.comentario}</Text>
+                    <Text style={[styles.comentario, { color: colors.text }]}>{asistencia.comentario}</Text>
                 </View>
             )}
 
@@ -112,7 +117,7 @@ const AsistenciaCard = ({ asistencia, navigation }) => {
 
 const styles = StyleSheet.create({
     card: {
-        backgroundColor: '#FFFFFF',
+        borderWidth: 1,
         borderRadius: 12,
         padding: 16,
         marginBottom: 12,
@@ -124,13 +129,11 @@ const styles = StyleSheet.create({
     },
     fecha: {
         fontSize: 12,
-        color: '#9CA3AF',
         marginBottom: 8,
     },
     clase: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: '#1F2937',
         marginBottom: 12,
     },
     infoRow: {
@@ -139,13 +142,11 @@ const styles = StyleSheet.create({
     },
     label: {
         fontSize: 14,
-        color: '#6B7280',
         marginRight: 8,
         fontWeight: '500',
     },
     value: {
         fontSize: 14,
-        color: '#1F2937',
     },
     comentarioContainer: {
         marginTop: 8,
@@ -153,7 +154,6 @@ const styles = StyleSheet.create({
     },
     comentario: {
         fontSize: 14,
-        color: '#1F2937',
         fontStyle: 'italic',
         marginTop: 4,
     },
