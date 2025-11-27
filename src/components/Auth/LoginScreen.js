@@ -1,6 +1,14 @@
 // LoginScreen.js
 import React, { useContext, useState } from 'react';
-import { View, TextInput, Button, Text, Alert, StyleSheet } from 'react-native';
+import {
+  View,
+  TextInput,
+  Text,
+  Alert,
+  StyleSheet,
+  TouchableOpacity
+} from 'react-native';
+
 import { apiService } from '../../services/apiService';
 import { ThemeContext } from '../../context/ThemeContext';
 import { lightColors, darkColors } from '../../config/colors';
@@ -15,34 +23,32 @@ export default function LoginScreen({ navigation }) {
   const colors = darkMode ? darkColors : lightColors;
 
   const handleLogin = async () => {
-      try {
-        const res = await apiService.login({ email, password });
-        const { token, nombre, email: userEmail, id } = res.data;
+    try {
+      console.log("🔐 [LOGIN] Intentando iniciar sesión...");
+      const res = await apiService.login({ email, password });
+      const { token, nombre, email: userEmail, id } = res.data;
 
-        if (!token) {
-          Alert.alert('Error', 'No se recibió token.');
-          return;
-        }
+      if (!token) return Alert.alert('Error', 'No se recibió token.');
+      if (!id) return Alert.alert('Error', 'El backend no envió el ID del usuario.');
 
-        if (!id) {
-          Alert.alert('Error', 'El backend no envió el ID del usuario.');
-          return;
-        }
+      const userReal = { id, email: userEmail, nombre };
 
-        const userReal = { id, email: userEmail, nombre };
+      console.log("💾 [STORAGE] Guardando usuario:", userReal);
+      await tokenStorage.saveToken(token);
+      await tokenStorage.saveUser(userReal);
 
-        await tokenStorage.saveToken(token);
-        await tokenStorage.saveUser(userReal);
+      console.log("🚀 [POLLING] Iniciando startPolling()");
+      startPolling();
 
-        console.log("💾 Usuario guardado:", userReal);
+      console.log("📣 [AUTH-EVENTS] Notificando login");
+      authEvents.notify({ type: 'login' });
 
-        startPolling();
-        authEvents.notify({ type: 'login' });
 
-      } catch (err) {
-        Alert.alert('Error', err.response?.data?.mensaje || 'Error al iniciar sesión');
-      }
+    } catch (err) {
+      Alert.alert('Error', err.response?.data?.mensaje || 'Error al iniciar sesión');
+    }
   };
+
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
@@ -81,25 +87,102 @@ export default function LoginScreen({ navigation }) {
         secureTextEntry
       />
 
-      <Button title="Iniciar sesión" onPress={handleLogin} />
-      <View style={{ height: 12 }} />
-      <Button title="Registrarse" onPress={() => navigation.navigate('Register')} />
-      <View style={{ height: 12 }} />
-      <Button title="Olvidé mi contraseña" onPress={() => navigation.navigate('ForgotPassword')} />
+      {/* BOTÓN LOGIN */}
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <Text style={styles.buttonText}>Iniciar sesión</Text>
+      </TouchableOpacity>
+
+      {/* REGISTRO */}
+      <TouchableOpacity
+        style={styles.buttonSecondary}
+        onPress={() => navigation.navigate('Register')}
+      >
+        <Text style={styles.buttonSecondaryText}>Registrarse</Text>
+      </TouchableOpacity>
+
+      {/* OLVIDÓ CONTRASEÑA */}
+      <TouchableOpacity
+        style={styles.buttonLink}
+        onPress={() => navigation.navigate('ForgotPassword')}
+      >
+        <Text style={[styles.buttonLinkText, { color: colors.text }]}>
+          Olvidé mi contraseña
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 24 },
-  title: { fontSize: 26, fontWeight: 'bold', marginBottom: 30, textAlign: 'center' },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 24,
+  },
+
+  title: {
+    fontSize: 28,
+    fontWeight: '700',
+    marginBottom: 40,
+  },
+
   input: {
     width: '90%',
-    height: 50,
+    height: 52,
     borderWidth: 1,
-    borderRadius: 10,
+    borderRadius: 14,
     paddingHorizontal: 15,
-    marginBottom: 20,
+    marginBottom: 18,
     fontSize: 16,
+  },
+
+  button: {
+    marginTop: 10,
+    backgroundColor: '#3B82F6',
+    paddingVertical: 16,
+    borderRadius: 14,
+    width: '90%',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 3,
+  },
+
+  buttonText: {
+    color: '#FFF',
+    fontSize: 17,
+    fontWeight: '600',
+  },
+
+  buttonSecondary: {
+    marginTop: 12,
+    backgroundColor: '#9CA3AF',
+    paddingVertical: 16,
+    borderRadius: 14,
+    width: '90%',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.12,
+    shadowRadius: 5,
+    elevation: 2,
+  },
+
+  buttonSecondaryText: {
+    color: '#FFF',
+    fontSize: 17,
+    fontWeight: '600',
+  },
+
+  buttonLink: {
+    marginTop: 16,
+    paddingVertical: 6,
+  },
+
+  buttonLinkText: {
+    fontSize: 15,
+    fontWeight: '500',
+    opacity: 0.85,
   },
 });

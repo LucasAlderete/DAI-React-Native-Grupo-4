@@ -1,31 +1,23 @@
-import React, { useEffect, useRef } from 'react';
-import * as Notifications from 'expo-notifications';
+import React from "react";
+import * as Notifications from "expo-notifications";
+import { ThemeProvider } from "./src/context/ThemeContext";
+import { NotificationProvider } from "./src/context/NotificationContext";
+import { startPolling } from "./src/workers/pollingService";
+import { registerForPushNotificationsAsync } from "./src/services/notificationsService";
+import { apiService } from "./src/services/apiService";
 
-import { ThemeProvider } from './src/context/ThemeContext';
-import { NotificationProvider } from './src/context/NotificationContext';
-import { startPolling } from './src/workers/pollingService';
-import { registerForPushNotificationsAsync } from './src/services/notificationsService';
+import { NavigationContainer } from "@react-navigation/native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import RootNavigator from "./src/navigation/RootNavigator";
+import { navigationRef } from "./src/navigation/RootNavigation";
 
-import { NavigationContainer } from '@react-navigation/native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import RootNavigator from './src/navigation/RootNavigator';
-
-let navigationRefGlobal = null;
-export function setNavigationRef(ref) {
-  navigationRefGlobal = ref;
-}
-
-// 🔔 Handler actualizado y único en la app:
-// - mostrar BANNER en foreground
-// - guardar en la lista/centro de notificaciones
-// - NO mostrar alert/modal (shouldShowAlert: false)
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
-    shouldShowBanner: true,   // muestra banner arriba unos segundos
-    shouldShowList: true,     // queda guardada en bandeja/centro de notificaciones
+    shouldShowBanner: true,
+    shouldShowList: true,
     shouldPlaySound: true,
     shouldSetBadge: true,
-    shouldShowAlert: false,   // IMPORTANT: evita el "aviso" modal
+    shouldShowAlert: false,
   }),
 });
 
@@ -40,31 +32,15 @@ export default function App() {
 }
 
 function AppContainer() {
-  const responseListener = useRef();
-
-  useEffect(() => {
+  React.useEffect(() => {
     registerForPushNotificationsAsync();
-
-    // Cuando el usuario toca la notificación
-    responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
-      console.log("👉 Usuario TOCÓ notificación:", response);
-      const claseId = response?.notification?.request?.content?.data?.claseId;
-      if (claseId && navigationRefGlobal) {
-        navigationRefGlobal.navigate("ClaseDetail", { claseId });
-      }
-    });
-
-    // Iniciar polling
+    apiService.generateNotifications().catch(() => {});
     startPolling();
-
-    return () => {
-      responseListener.current?.remove();
-    };
   }, []);
 
   return (
     <SafeAreaProvider>
-      <NavigationContainer ref={setNavigationRef}>
+      <NavigationContainer ref={navigationRef}>
         <RootNavigator />
       </NavigationContainer>
     </SafeAreaProvider>

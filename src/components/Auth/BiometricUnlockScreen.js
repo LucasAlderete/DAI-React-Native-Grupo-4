@@ -1,4 +1,3 @@
-// BiometricUnlockScreen.js
 import * as LocalAuthentication from 'expo-local-authentication';
 import React, { useEffect, useContext } from 'react';
 import { View, StyleSheet, TouchableOpacity, Text, Alert } from 'react-native';
@@ -13,7 +12,6 @@ export default function BiometricUnlockScreen({ navigation }) {
 
   useEffect(() => {
     (async () => {
-      console.log("🔐 Pantalla biométrica montada");
 
       try {
         const result = await LocalAuthentication.authenticateAsync({
@@ -22,31 +20,23 @@ export default function BiometricUnlockScreen({ navigation }) {
         });
 
         if (!result?.success) {
-          console.log("❌ Falló autenticación biométrica");
           Alert.alert('Falló la autenticación', 'No se pudo verificar la biometría.');
           return;
         }
 
-        console.log("✔ Autenticado correctamente");
         navigation.replace('MainTabs');
 
         let user = await tokenStorage.getUser();
-        console.log("📦 Usuario recuperado de storage:", user);
 
         if (!user || !user.id) {
           user = { id: 1, nombre: 'BiometricUser', isBiometric: true };
-          console.log('ℹ Usuario biométrico TEMPORAL:', user);
         } else {
-          console.log('✔ Usuario REAL recuperado:', user);
-
-          console.log("⚙ Llamando a startPolling(user.id) desde biométrico");
+          console.log('Usuario recuperado:', user);
           startPolling(user.id);
 
-          console.log('📡 Polling iniciado con userId=', user.id);
         }
 
       } catch (err) {
-        console.error('💥 Error en biometría:', err);
         Alert.alert('Error', 'Ocurrió un error al intentar autenticar.');
       }
     })();

@@ -31,19 +31,20 @@ const VerifyCodeScreen = ({ route, navigation }) => {
         console.log("🔑 Token recibido, guardando...");
         await tokenStorage.saveToken(data.token);
 
-        if (data.usuario) {
-          console.log("👤 Usuario recibido, guardando:", data.usuario);
-          await tokenStorage.saveUser(data.usuario);
+        // Usamos los datos reales que vienen del backend
+        const usuario = {
+          id: data.id,
+          email: data.email,
+          nombre: data.nombre,
+          fotoUrl: data.fotoUrl,
+        };
+        console.log("👤 Usuario usado:", usuario);
+        await tokenStorage.saveUser(usuario);
 
-          console.log("⚙ Llamando a startPolling() desde VerifyCode");
-          startPolling(data.usuario.id);
+        console.log("⚙ Llamando a startPolling() con userId:", usuario.id);
+        startPolling(usuario.id);
 
-          console.log("📡 Polling iniciado con userId =", data.usuario.id);
-          navigation.replace("MainTabs");
-        } else {
-          Alert.alert('Atención', 'Token recibido pero usuario faltante.');
-          console.log("⚠ Token recibido pero SIN usuario");
-        }
+        navigation.replace("MainTabs");
       } else {
         Alert.alert('Atención', 'Código verificado, pero no se recibió token.');
       }
@@ -68,14 +69,10 @@ const VerifyCodeScreen = ({ route, navigation }) => {
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Text style={[styles.title, { color: colors.text }]}>Verificar código</Text>
-
       <Text style={[styles.subtitle, { color: colors.text }]}>Hemos enviado un código a tu correo: {email}</Text>
 
       <TextInput
-        style={[
-          styles.input,
-          { backgroundColor: colors.card, borderColor: colors.border, color: colors.text }
-        ]}
+        style={[styles.input, { backgroundColor: colors.card, borderColor: colors.border, color: colors.text }]}
         placeholder="Ingresá el código"
         placeholderTextColor={colors.placeholder}
         keyboardType="number-pad"
@@ -91,8 +88,8 @@ const VerifyCodeScreen = ({ route, navigation }) => {
             <Text style={styles.buttonText}>Verificar</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.link} onPress={handleResend}>
-            <Text style={styles.linkText}>Reenviar código</Text>
+          <TouchableOpacity style={styles.buttonSecondary} onPress={handleResend}>
+            <Text style={styles.buttonSecondaryText}>Reenviar código</Text>
           </TouchableOpacity>
         </>
       )}
@@ -103,12 +100,49 @@ const VerifyCodeScreen = ({ route, navigation }) => {
 export default VerifyCodeScreen;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', padding: 24 },
-  title: { fontSize: 26, fontWeight: 'bold', textAlign: 'center', marginBottom: 10 },
-  subtitle: { fontSize: 15, textAlign: 'center', marginBottom: 25 },
-  input: { borderWidth: 1, borderRadius: 8, padding: 10, fontSize: 16, textAlign: 'center' },
-  button: { backgroundColor: '#007AFF', paddingVertical: 12, borderRadius: 8, marginTop: 25 },
-  buttonText: { color: '#fff', textAlign: 'center', fontWeight: '600', fontSize: 16 },
-  link: { marginTop: 15 },
-  linkText: { textAlign: 'center', color: '#007AFF', fontSize: 15 },
+container: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 24 },
+
+title: { fontSize: 28, fontWeight: '700', marginBottom: 20, textAlign: 'center' },
+subtitle: { fontSize: 15, textAlign: 'center', marginBottom: 25 },
+
+input: {
+width: '90%',
+height: 52,
+borderWidth: 1,
+borderRadius: 14,
+paddingHorizontal: 15,
+marginBottom: 18,
+fontSize: 16,
+textAlign: 'center',
+},
+
+button: {
+marginTop: 10,
+backgroundColor: '#3B82F6',
+paddingVertical: 16,
+borderRadius: 14,
+width: '90%',
+alignItems: 'center',
+shadowColor: '#000',
+shadowOpacity: 0.15,
+shadowRadius: 6,
+elevation: 3,
+},
+
+buttonText: { color: '#FFF', fontSize: 17, fontWeight: '600' },
+
+buttonSecondary: {
+marginTop: 25,
+backgroundColor: '#9CA3AF',
+paddingVertical: 16,
+borderRadius: 14,
+width: '90%',
+alignItems: 'center',
+shadowColor: '#000',
+shadowOpacity: 0.15,
+shadowRadius: 6,
+elevation: 3,
+},
+
+buttonSecondaryText: { color: '#FFF', fontSize: 17, fontWeight: '600' },
 });

@@ -13,7 +13,7 @@ import { ThemeContext } from '../../context/ThemeContext';
 import { lightColors, darkColors } from '../../config/colors';
 
 const ClaseDetail = ({ route, navigation }) => {
-  const { claseId } = route.params;
+  const { claseId, reservaId } = route.params;
   const [clase, setClase] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -23,6 +23,10 @@ const ClaseDetail = ({ route, navigation }) => {
 
   useEffect(() => {
     fetchClaseDetail();
+    console.log("Params:", route.params);
+    if (reservaId) {
+    } else {
+    }
   }, [claseId]);
 
   const fetchClaseDetail = async () => {
@@ -42,15 +46,15 @@ const ClaseDetail = ({ route, navigation }) => {
   const formatDateTime = (dateString) => {
     const date = new Date(dateString);
     const days = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
-    const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 
+    const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
                     'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
-    
+
     const dayName = days[date.getDay()];
     const day = date.getDate();
     const month = months[date.getMonth()];
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
-    
+
     return `${dayName} ${day} de ${month} ${hours}:${minutes}hs`;
   };
 
@@ -68,7 +72,6 @@ const ClaseDetail = ({ route, navigation }) => {
   };
 
   const handleReservar = () => {
-    // TODO: Implementar lógica de reserva
     console.log('Reservar clase:', claseId);
   };
 

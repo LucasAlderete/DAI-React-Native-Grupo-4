@@ -2,16 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { View, ActivityIndicator, Text } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { authService, authEvents } from '../services/authService';
-
-// Pantallas de autenticación
+import DetalleReservaScreen from '../components/Reservas/DetalleReservaScreen';
 import LoginScreen from '../components/Auth/LoginScreen';
 import RegisterScreen from '../components/Auth/RegisterScreen';
 import VerifyCodeScreen from '../components/Auth/VerifyCodeScreen';
 import ForgotPasswordScreen from '../components/Auth/ForgotPasswordScreen';
 import BiometricUnlockScreen from '../components/Auth/BiometricUnlockScreen';
-
-// Navegación principal
 import TabNavigator from './TabNavigator';
+
+import ClaseDetailScreen from '../components/ClaseDetail/index';
 
 const Stack = createStackNavigator();
 
@@ -81,6 +80,10 @@ export default function RootNavigator() {
           <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
         </>
       )}
+
+      <Stack.Screen name="ClaseDetail" component={ClaseDetailScreen} />
+      <Stack.Screen name="DetalleReserva" component={DetalleReservaScreen} />
+
     </Stack.Navigator>
   );
 }

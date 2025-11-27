@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -13,12 +13,21 @@ import reservasService from '../../services/reservasService';
 import { formatearFechaLarga, extraerHora } from '../../utils/dateFormatter';
 import { ThemeContext } from '../../context/ThemeContext';
 import { lightColors, darkColors } from '../../config/colors';
+import { useLayoutEffect } from 'react';
 
 export default function DetalleReservaScreen({ navigation, route }) {
-  const { reserva } = route.params;
-  const [eliminando, setEliminando] = useState(false);
+  const { reserva, claseId } = route.params;
 
-  const clase = reserva?.clase || {};
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: true,
+      title: 'Detalle de Reserva',
+    });
+  }, [navigation]);
+
+  const [reservaState, setReservaState] = useState(reserva || null);
+  const [eliminando, setEliminando] = useState(false);
+  const clase = reservaState?.clase || {};
   const disciplina = clase.disciplina || {};
   const instructor = clase.instructor || {};
   const sede = clase.sede || {};
@@ -26,18 +35,28 @@ export default function DetalleReservaScreen({ navigation, route }) {
   const { darkMode } = useContext(ThemeContext);
   const colors = darkMode ? darkColors : lightColors;
 
+  useEffect(() => {
+    if (!reservaState && claseId) {
+      cargarReserva(claseId);
+    }
+  }, []);
+
+  async function cargarReserva(claseId) {
+    try {
+      const res = await reservasService.getReservaByClase(claseId);
+      setReservaState(res);
+    } catch (e) {
+      console.log("Error cargando reserva:", e);
+    }
+  }
+
   const formatearFecha = (fechaString) => {
     if (!fechaString) return 'Fecha no disponible';
-    
+
     try {
       const fecha = new Date(fechaString);
-      
-      // Verificar si la fecha es válida
-      if (isNaN(fecha.getTime())) {
-        console.warn('Fecha inválida:', fechaString);
-        return 'Fecha no disponible';
-      }
-      
+      if (isNaN(fecha.getTime())) return 'Fecha no disponible';
+
       const opciones = {
         weekday: 'long',
         year: 'numeric',
@@ -47,78 +66,65 @@ export default function DetalleReservaScreen({ navigation, route }) {
         minute: '2-digit',
       };
       return fecha.toLocaleDateString('es-AR', opciones);
-    } catch (error) {
-      console.error('Error al formatear fecha:', error, fechaString);
+    } catch {
       return 'Fecha no disponible';
     }
   };
 
   const formatearFechaCorta = (fechaString) => {
     if (!fechaString) return 'Fecha no disponible';
-    
     try {
       const fecha = new Date(fechaString);
-      
-      // Verificar si la fecha es válida
-      if (isNaN(fecha.getTime())) {
-        return 'Fecha no disponible';
-      }
-      
+      if (isNaN(fecha.getTime())) return 'Fecha no disponible';
       return fecha.toLocaleDateString('es-AR');
-    } catch (error) {
-      console.error('Error al formatear fecha:', error, fechaString);
+    } catch {
       return 'Fecha no disponible';
     }
   };
 
   const getEstadoColor = (estado) => {
     switch (estado?.toLowerCase()) {
-      case 'confirmada':
-        return '#28a745';
-      case 'cancelada':
-        return '#dc3545';
-      case 'pendiente':
-        return '#ffc107';
-      default:
-        return '#6c757d';
+      case 'confirmada': return '#28a745';
+      case 'cancelada': return '#dc3545';
+      case 'pendiente': return '#ffc107';
+      default: return '#6c757d';
     }
   };
 
-  const getEstadoTexto = (estado) => {
-    return estado || 'Confirmada';
-  };
+  const getEstadoTexto = (estado) => estado || 'Confirmada';
 
   const handleCancelarReserva = () => {
     Alert.alert(
-      'Cancelar Reserva',
-      '¿Estás seguro de que deseas cancelar esta reserva?\n\nEsta acción no se puede deshacer.',
+      "Cancelar Reserva",
+      "¿Estás seguro de que deseas cancelar esta reserva?",
       [
+        { text: "No, mantener", style: "cancel" },
         {
-          text: 'No, mantener',
-          style: 'cancel',
-        },
-        {
-          text: 'Sí, cancelar',
-          style: 'destructive',
+          text: "Sí, cancelar",
+          style: "destructive",
           onPress: async () => {
             try {
               setEliminando(true);
-              await reservasService.cancelarReserva(reserva.id);
+
+              await reservasService.cancelarReserva(reservaState.id);
+
               Alert.alert(
-                'Reserva Cancelada',
-                'Tu reserva ha sido cancelada exitosamente.',
+                "Reserva Cancelada",
+                "Tu reserva ha sido cancelada exitosamente.",
                 [
                   {
-                    text: 'OK',
-                    onPress: () => navigation.navigate('MisReservasMain'),
+                    text: "OK",
+                    onPress: () =>
+                      navigation.navigate("MisReservasMain"),
                   },
                 ]
               );
             } catch (error) {
               const mensaje =
-                error.response?.data?.message ||
-                'No se pudo cancelar la reserva. Intenta nuevamente.';
-              Alert.alert('Error', mensaje);
+                error?.response?.data?.message ||
+                "No se pudo cancelar la reserva.";
+
+              Alert.alert("Error", mensaje);
             } finally {
               setEliminando(false);
             }
@@ -129,35 +135,43 @@ export default function DetalleReservaScreen({ navigation, route }) {
   };
 
   const puedeSerCancelada = () => {
-    if (!reserva.estado || reserva.estado.toLowerCase() === 'cancelada') {
+    if (!reservaState?.estado || reservaState.estado.toLowerCase() === 'cancelada') {
       return false;
     }
-    // Verificar si la clase ya pasó
     const fechaClase = new Date(clase.fechaInicio);
     const ahora = new Date();
     return fechaClase > ahora;
   };
 
   const openMaps = () => {
-      const query = encodeURIComponent(clase.sede.direccion);
-      const url = `https://www.google.com/maps/search/?api=1&query=${query}`;
-      Linking.openURL(url);
-      // ej https://www.google.com/maps/search/?api=1&query=Av.%20Corrientes%201234%2C%20CABA
+    const query = encodeURIComponent(clase.sede.direccion);
+    const url = `https://www.google.com/maps/search/?api=1&query=${query}`;
+    Linking.openURL(url);
+  };
+
+  if (!reservaState) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" />
+        <Text>Cargando reserva...</Text>
+      </View>
+    );
   }
 
   return (
     <View style={[styles.container, {backgroundColor: colors.background}]}>
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.content}>
-        {/* Estado de la Reserva */}
+
+        {/* Estado */}
         <View style={styles.estadoContainer}>
           <View
             style={[
               styles.estadoBadge,
-              { backgroundColor: getEstadoColor(reserva.estado) },
+              { backgroundColor: getEstadoColor(reservaState.estado) },
             ]}
           >
             <Text style={styles.estadoText}>
-              {getEstadoTexto(reserva.estado)}
+              {getEstadoTexto(reservaState.estado)}
             </Text>
           </View>
         </View>

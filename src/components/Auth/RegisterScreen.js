@@ -1,5 +1,13 @@
 import React, { useContext, useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  Alert,
+  StyleSheet,
+  TouchableOpacity
+} from 'react-native';
+
 import { authService } from '../../services/authService';
 import { ThemeContext } from '../../context/ThemeContext';
 import { lightColors, darkColors } from '../../config/colors';
@@ -21,18 +29,18 @@ export default function RegisterScreen({ navigation }) {
 
     try {
       setLoading(true);
+      console.log('[REGISTER] Iniciando registro...', { nombre, email });
 
-      const registerResponse = await authService.register(nombre, email, password);
-
-      const otpResponse = await authService.resendOtp(email);
+      const registerRes = await authService.register(nombre, email, password);
+      console.log('[REGISTER] Registro exitoso:', registerRes);
 
       Alert.alert('Código enviado', `Se envió un código al correo ${email}`);
 
-      navigation.navigate('VerifyCode', { nombre, email, password });
+      navigation.navigate('VerifyCode', { email }); // no necesitamos nombre ni password
 
     } catch (err) {
-      console.error('❌ Error en registro/OTP:', err);
-      Alert.alert('Error', err.message || 'No se pudo enviar el código');
+      console.error('[REGISTER] Error general:', err);
+      Alert.alert('Error', err.message || 'No se pudo completar el registro');
     } finally {
       setLoading(false);
     }
@@ -40,6 +48,7 @@ export default function RegisterScreen({ navigation }) {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
+
       <Text style={[styles.title, { color: colors.text }]}>Registro</Text>
 
       <TextInput
@@ -48,7 +57,7 @@ export default function RegisterScreen({ navigation }) {
           {
             backgroundColor: colors.card,
             borderColor: colors.border,
-            color: colors.text,
+            color: colors.text
           }
         ]}
         placeholder="Nombre"
@@ -56,13 +65,14 @@ export default function RegisterScreen({ navigation }) {
         value={nombre}
         onChangeText={setNombre}
       />
+
       <TextInput
         style={[
           styles.input,
           {
             backgroundColor: colors.card,
             borderColor: colors.border,
-            color: colors.text,
+            color: colors.text
           }
         ]}
         placeholder="Email"
@@ -78,7 +88,7 @@ export default function RegisterScreen({ navigation }) {
           {
             backgroundColor: colors.card,
             borderColor: colors.border,
-            color: colors.text,
+            color: colors.text
           }
         ]}
         placeholder="Contraseña"
@@ -88,23 +98,86 @@ export default function RegisterScreen({ navigation }) {
         secureTextEntry
       />
 
-      <Button
-        title={loading ? 'Procesando...' : 'Registrarse'}
+      <TouchableOpacity
+        style={styles.button}
         onPress={handleRegister}
         disabled={loading}
-      />
+      >
+        <Text style={styles.buttonText}>
+          {loading ? 'Procesando...' : 'Registrarse'}
+        </Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.buttonSecondary}
+        onPress={() => navigation.navigate('Login')}
+      >
+        <Text style={styles.buttonSecondaryText}>Ya tengo una cuenta</Text>
+      </TouchableOpacity>
+
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, justifyContent: 'center', alignItems: 'center' },
-  title: { fontSize: 24, fontWeight: 'bold', marginBottom: 24, textAlign: 'center' },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 24,
+  },
+
+  title: {
+    fontSize: 28,
+    fontWeight: '700',
+    marginBottom: 40,
+  },
+
   input: {
-    borderWidth: 1,
-    borderRadius: 6,
-    padding: 10,
-    marginBottom: 12,
     width: '90%',
+    height: 52,
+    borderWidth: 1,
+    borderRadius: 14,
+    paddingHorizontal: 15,
+    marginBottom: 18,
+    fontSize: 16,
+  },
+
+  button: {
+    marginTop: 10,
+    backgroundColor: '#3B82F6',
+    paddingVertical: 16,
+    borderRadius: 14,
+    width: '90%',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 3,
+  },
+
+  buttonText: {
+    color: '#FFF',
+    fontSize: 17,
+    fontWeight: '600',
+  },
+
+  buttonSecondary: {
+    marginTop: 12,
+    backgroundColor: '#9CA3AF',
+    paddingVertical: 16,
+    borderRadius: 14,
+    width: '90%',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.12,
+    shadowRadius: 5,
+    elevation: 2,
+  },
+
+  buttonSecondaryText: {
+    color: '#FFF',
+    fontSize: 17,
+    fontWeight: '600',
   },
 });

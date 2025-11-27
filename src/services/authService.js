@@ -15,7 +15,6 @@ export const authEvents = {
 
 const API_HOST = API_CONFIG.HOST;
 
-
 export const authService = {
   async login(email, password) {
     try {
@@ -53,29 +52,24 @@ export const authService = {
   },
 
   async resendOtp(email) {
-    const url = `${API_HOST}/api/auth/enviar-otp`;
+    const url = "http://192.168.0.93:8080/api/auth/enviar-otp";
 
-    try {
-      const resp = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      });
+    console.log("Enviando OTP a:", url);
 
-      const data = await resp.json();
+    const resp = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
 
-      if (!resp.ok) throw new Error(data.mensaje || 'Error al enviar código');
-
-      return data;
-    } catch (err) {
-      throw err;
-    }
+    const data = await resp.json();
+    return data;
   },
 
   async register(nombre, email, password) {
     try {
-      const { data } = await apiService.registerUsuario({ nombre, email, password });
-      return data;
+      const res = await apiService.registerUsuario({ nombre, email, password });
+      return res.data;
     } catch (err) {
       throw err;
     }
@@ -83,10 +77,7 @@ export const authService = {
 
   async validateToken() {
     const token = await tokenStorage.getToken();
-
-    if (!token) {
-      return null;
-    }
+    if (!token) return null;
 
     try {
       const { data } = await apiService.validateToken(token);
