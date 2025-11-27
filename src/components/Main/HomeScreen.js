@@ -1,85 +1,60 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useContext } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView } from 'react-native';
+import { authService } from '../../services/authService';
 import { ThemeContext } from '../../context/ThemeContext';
-
-const NOTIFICATIONS_KEY = "local_notifications";
+import NewsCarousel from './NewsCarousel';
 
 export default function HomeScreen({ navigation }) {
 
   const { theme } = useContext(ThemeContext);
 
-  const [hasAlerts, setHasAlerts] = useState(false);
-
-  useEffect(() => {
-    const load = async () => {
-      const data = await AsyncStorage.getItem("local_notifications");
-
-      if (data) {
-        const list = JSON.parse(data);
-
-        if (list.length > 0) {
-          setHasAlerts(true);
-
-          Alert.alert("Aviso", list[list.length - 1].mensaje, [
-            { text: "OK" },
-          ]);
-
-          await AsyncStorage.removeItem("local_notifications");
-        }
-      }
-    };
-
-    load();
-  }, []);
-
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <NewsCarousel />
 
-      <Text style={[styles.title, { color: theme.text }]}>
-        Bienvenido a RitmoFit 🏋️‍♂️
-      </Text>
+        <Text style={[styles.title, { color: theme.text }]}>Bienvenido a RitmoFit 🏋️‍♂️</Text>
 
-      {hasAlerts && (
-        <Text style={{ color: "red", marginBottom: 10 }}>
-          🔔 Tenés novedades recientes
-        </Text>
-      )}
+        <TextInput
+          style={[
+            styles.input,
+            {
+              backgroundColor: theme.card,
+              borderColor: theme.border,
+              color: theme.text,
+            }
+          ]}
+          placeholder="Buscar clase..."
+          placeholderTextColor={theme.placeholder}
+        />
 
-      <TextInput
-        style={[
-          styles.input,
-          {
-            backgroundColor: theme.card,
-            borderColor: theme.border,
-            color: theme.text,
-          }
-        ]}
-        placeholder="Buscar clase..."
-        placeholderTextColor={theme.placeholder}
-      />
+        <TouchableOpacity 
+          style={styles.button}
+          onPress={() => navigation.navigate('ClasesList')}
+        >
+          <Text style={styles.buttonText}>Ver Clases</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('ClasesList')}
-      >
-        <Text style={styles.buttonText}>Ver Clases</Text>
-      </TouchableOpacity>
+        <TouchableOpacity 
+          style={[styles.button, styles.reservasButton]}
+          onPress={() => {
+            // Navegar al tab de Reservas
+            navigation.getParent()?.navigate('Reservas');
+          }}
+        >
+          <Text style={styles.buttonText}>📅 Mis Reservas</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity
-        style={[styles.button, styles.reservasButton]}
-        onPress={() => navigation.getParent()?.navigate('Reservas')}
-      >
-        <Text style={styles.buttonText}>📅 Mis Reservas</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={[styles.button, styles.historialButton]}
-        onPress={() => navigation.getParent()?.navigate('Historial')}
-      >
-        <Text style={styles.buttonText}>📊 Ver Historial</Text>
-      </TouchableOpacity>
-
+        <TouchableOpacity 
+          style={[styles.button, styles.historialButton]}
+          onPress={() => {
+            // Navegar al tab de Historial
+            navigation.getParent()?.navigate('Historial');
+          }}
+        >
+          <Text style={styles.buttonText}>📊 Ver Historial</Text>
+        </TouchableOpacity>
+      </ScrollView>
     </View>
   );
 }
@@ -87,9 +62,12 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingHorizontal: 0,
+  },
+  scrollContent: {
     paddingHorizontal: 20,
+    paddingBottom: 20,
   },
   title: {
     fontSize: 26,
