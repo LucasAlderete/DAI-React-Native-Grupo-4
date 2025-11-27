@@ -2,6 +2,8 @@ import React, { useContext, useState } from 'react';
 import { View, TextInput, Button, Text, Alert, StyleSheet } from 'react-native';
 import { authService } from '../../services/authService';
 import { ThemeContext } from '../../context/ThemeContext';
+import { tokenStorage } from '../../services/tokenStorage';
+import api from '../../services/api';
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
@@ -17,14 +19,22 @@ export default function LoginScreen({ navigation }) {
 
     try {
       const res = await authService.login(email, password);
+      // console.log("LOGIN RESPONSE:", res);
 
       if (res.mensaje?.toLowerCase().includes('código')) {
         Alert.alert('Código enviado', 'Se envió un código a tu correo.');
         navigation.navigate('VerifyCode', { email, password });
       }
       else if (res.token) {
+        // guardar el token
+        await tokenStorage.saveToken(res.token);
+
+        // actualizar axios para que las llamadas usen en nuevo token
+        api.defaults.headers.common['Authorization'] = `Bearer ${res.token}`;
+
         Alert.alert('Bienvenido', 'Inicio de sesión exitoso');
-      } else {
+      } 
+      else {
         Alert.alert('Error', res.mensaje || 'No se pudo iniciar sesión');
       }
     } catch (err) {
