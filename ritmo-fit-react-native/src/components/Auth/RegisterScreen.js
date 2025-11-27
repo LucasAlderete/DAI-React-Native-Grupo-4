@@ -2,7 +2,6 @@ import React, { useContext, useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import { authService } from '../../services/authService';
 import { ThemeContext } from '../../context/ThemeContext';
-import { lightColors, darkColors } from '../../config/colors';
 
 export default function RegisterScreen({ navigation }) {
   const [nombre, setNombre] = useState('');
@@ -10,8 +9,7 @@ export default function RegisterScreen({ navigation }) {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const { darkMode } = useContext(ThemeContext);
-  const colors = darkMode ? darkColors : lightColors;
+  const { theme } = useContext(ThemeContext);
 
   const handleRegister = async () => {
     if (!nombre || !email || !password) {
@@ -39,20 +37,20 @@ export default function RegisterScreen({ navigation }) {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <Text style={[styles.title, { color: colors.text }]}>Registro</Text>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
+      <Text style={[styles.title, { color: theme.text }]}>Registro</Text>
 
       <TextInput
         style={[
           styles.input,
           {
-            backgroundColor: colors.card,
-            borderColor: colors.border,
-            color: colors.text,
+            backgroundColor: theme.card,
+            borderColor: theme.border,
+            color: theme.text,
           }
         ]}
         placeholder="Nombre"
-        placeholderTextColor={colors.placeholder}
+        placeholderTextColor={theme.placeholder}
         value={nombre}
         onChangeText={setNombre}
       />
@@ -60,13 +58,13 @@ export default function RegisterScreen({ navigation }) {
         style={[
           styles.input,
           {
-            backgroundColor: colors.card,
-            borderColor: colors.border,
-            color: colors.text,
+            backgroundColor: theme.card,
+            borderColor: theme.border,
+            color: theme.text,
           }
         ]}
         placeholder="Email"
-        placeholderTextColor={colors.placeholder}
+        placeholderTextColor={theme.placeholder}
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
@@ -76,13 +74,13 @@ export default function RegisterScreen({ navigation }) {
         style={[
           styles.input,
           {
-            backgroundColor: colors.card,
-            borderColor: colors.border,
-            color: colors.text,
+            backgroundColor: theme.card,
+            borderColor: theme.border,
+            color: theme.text,
           }
         ]}
         placeholder="Contraseña"
-        placeholderTextColor={colors.placeholder}
+        placeholderTextColor={theme.placeholder}
         value={password}
         onChangeText={setPassword}
         secureTextEntry

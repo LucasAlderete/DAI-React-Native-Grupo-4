@@ -1,32 +1,30 @@
 import React, { useContext } from 'react';
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import { ThemeContext } from '../../context/ThemeContext';
-import { lightColors, darkColors } from '../../config/colors';
 
 const ClaseCard = ({ clase, onPress, formatDate }) => {
 
-  const { darkMode } = useContext(ThemeContext);
-  const colors = darkMode ? darkColors : lightColors;
+  const { theme } = useContext(ThemeContext);
   
   return (
-    <TouchableOpacity style={[styles.card, { backgroundColor: colors.card, borderColor: colors.border }]} onPress={onPress}>
+    <TouchableOpacity style={[styles.card, { backgroundColor: theme.card, borderColor: theme.border }]} onPress={onPress}>
       <Text style={styles.disciplineName}>{clase.disciplina.nombre}</Text>
       
       <View style={styles.infoRow}>
         <Text style={styles.icon}>📅</Text>
-        <Text style={[styles.infoText, { color: colors.text }]}>{formatDate(clase.fechaInicio)}</Text>
+        <Text style={[styles.infoText, { color: theme.text }]}>{formatDate(clase.fechaInicio)}</Text>
       </View>
       
       <View style={styles.infoRow}>
         <Text style={styles.icon}>👤</Text>
-        <Text style={[styles.infoText, { color: colors.text }]}>
+        <Text style={[styles.infoText, { color: theme.text }]}>
           Instructor: {clase.instructor.nombre} {clase.instructor.apellido}
         </Text>
       </View>
       
       <View style={styles.infoRow}>
         <Text style={styles.icon}>📍</Text>
-        <Text style={[styles.infoText, { color: colors.text }]}>Sede: {clase.sede.nombre}</Text>
+        <Text style={[styles.infoText, { color: theme.text }]}>Sede: {clase.sede.nombre}</Text>
       </View>
     </TouchableOpacity>
   );

@@ -13,8 +13,6 @@ import FilterSelector from './FilterSelector';
 import ModalSelector from './ModalSelector';
 import CalendarModal from './CalendarModal';
 import ClaseCard from './ClaseCard';
-import ThemeToggle from '../ThemeToggle';
-import { lightColors, darkColors } from '../../config/colors';
 import { ThemeContext } from '../../context/ThemeContext';
 
 const ClasesList = ({ navigation }) => {
@@ -35,8 +33,7 @@ const ClasesList = ({ navigation }) => {
   const [disciplinaModalVisible, setDisciplinaModalVisible] = useState(false);
   const [fechaModalVisible, setFechaModalVisible] = useState(false);
 
-  const { darkMode } = useContext(ThemeContext);
-  const colors = darkMode ? darkColors : lightColors;
+  const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
     fetchClases();
@@ -151,13 +148,13 @@ const ClasesList = ({ navigation }) => {
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
       <View 
         style={[
           styles.filtersContainer,
           {
-            backgroundColor: colors.background,
-            borderBottomColor: colors.border,
+            backgroundColor: theme.background,
+            borderBottomColor: theme.border,
           }
         ]}>
         <FilterSelector

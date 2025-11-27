@@ -13,7 +13,6 @@ import { useFocusEffect } from '@react-navigation/native';
 import reservasService from '../../services/reservasService';
 import { extraerHora } from '../../utils/dateFormatter';
 import { ThemeContext } from '../../context/ThemeContext';
-import { lightColors, darkColors } from '../../config/colors';
 
 export default function MisReservasScreen({ navigation }) {
   const [reservas, setReservas] = useState([]);
@@ -22,8 +21,7 @@ export default function MisReservasScreen({ navigation }) {
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
 
-  const { darkMode } = useContext(ThemeContext);
-  const colors = darkMode ? darkColors : lightColors;
+  const { theme } = useContext(ThemeContext);
 
   const cargarReservas = async (pageNum = 0, isRefreshing = false) => {
     try {
@@ -128,11 +126,11 @@ export default function MisReservasScreen({ navigation }) {
 
     return (
       <TouchableOpacity
-        style={[styles.reservaCard, {backgroundColor: colors.card, borderColor: colors.border}]}
+        style={[styles.reservaCard, {backgroundColor: theme.card, borderColor: theme.border}]}
         onPress={() => navigation.navigate('DetalleReserva', { reserva: item })}
       >
         <View style={styles.cardHeader}>
-          <Text style={[styles.disciplinaText, {color: colors.text}]}>{clase.nombre || disciplina.nombre || 'Clase'}</Text>
+          <Text style={[styles.disciplinaText, {color: theme.text}]}>{clase.nombre || disciplina.nombre || 'Clase'}</Text>
           <View
             style={[
               styles.estadoBadge,
@@ -146,21 +144,21 @@ export default function MisReservasScreen({ navigation }) {
         </View>
 
         <View style={styles.cardBody}>
-          <Text style={[styles.instructorText, {color: colors.textSecondary}]}>
+          <Text style={[styles.instructorText, {color: theme.textSecondary}]}>
             👤 {instructor.nombre} {instructor.apellido || ''}
           </Text>
-          <Text style={[styles.sedeText, {color: colors.textSecondary}]}>📍 {sede.nombre || 'Sede'}</Text>
-          <Text style={[styles.fechaText, {color: colors.textSecondary}]}>
+          <Text style={[styles.sedeText, {color: theme.textSecondary}]}>📍 {sede.nombre || 'Sede'}</Text>
+          <Text style={[styles.fechaText, {color: theme.textSecondary}]}>
             🗓️ {formatearFecha(clase.fechaInicio)}
           </Text>
           {clase.fechaInicio && clase.fechaFin && (
-            <Text style={[styles.duracionText, {color: colors.textSecondary}]}>
+            <Text style={[styles.duracionText, {color: theme.textSecondary}]}>
               ⏱️ {extraerHora(clase.fechaInicio)} - {extraerHora(clase.fechaFin)}
             </Text>
           )}
         </View>
 
-        <View style={[styles.cardFooter, {borderTopColor: colors.border}]}>
+        <View style={[styles.cardFooter, {borderTopColor: theme.border}]}>
           <Text style={styles.verDetalleText}>Ver detalle →</Text>
         </View>
       </TouchableOpacity>
@@ -169,10 +167,10 @@ export default function MisReservasScreen({ navigation }) {
 
   const renderEmptyState = () => (
     <View style={styles.emptyContainer}>
-      <Text style={[styles.emptyText, { color: colors.text }]}>📅</Text>
+      <Text style={[styles.emptyText, { color: theme.text }]}>📅</Text>
       
-      <Text style={[styles.emptyTitle, { color: colors.text }]}>No tienes reservas</Text>
-      <Text style={[styles.emptySubtitle, { color: colors.text }]}>
+      <Text style={[styles.emptyTitle, { color: theme.text }]}>No tienes reservas</Text>
+      <Text style={[styles.emptySubtitle, { color: theme.text }]}>
         Comienza reservando una clase para ver tus reservas aquí
       </Text>
       <TouchableOpacity
@@ -197,15 +195,15 @@ export default function MisReservasScreen({ navigation }) {
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]} >
+    <View style={[styles.container, { backgroundColor: theme.background }]} >
       <View style={[
         styles.header,
         {
-          backgroundColor: colors.card,
-          borderBottomColor: colors.border
+          backgroundColor: theme.card,
+          borderBottomColor: theme.border
         }
       ]}>
-        <Text style={[styles.title, { color: colors.text }]} >Mis Reservas</Text>
+        <Text style={[styles.title, { color: theme.text }]} >Mis Reservas</Text>
         <TouchableOpacity
           onPress={() => {
             // Navegar a CrearReserva en el ReservasStack

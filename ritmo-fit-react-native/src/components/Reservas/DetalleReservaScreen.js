@@ -12,7 +12,6 @@ import {
 import reservasService from '../../services/reservasService';
 import { formatearFechaLarga, extraerHora } from '../../utils/dateFormatter';
 import { ThemeContext } from '../../context/ThemeContext';
-import { lightColors, darkColors } from '../../config/colors';
 
 export default function DetalleReservaScreen({ navigation, route }) {
   const { reserva } = route.params;
@@ -23,8 +22,7 @@ export default function DetalleReservaScreen({ navigation, route }) {
   const instructor = clase.instructor || {};
   const sede = clase.sede || {};
 
-  const { darkMode } = useContext(ThemeContext);
-  const colors = darkMode ? darkColors : lightColors;
+  const { theme } = useContext(ThemeContext);
 
   const formatearFecha = (fechaString) => {
     if (!fechaString) return 'Fecha no disponible';
@@ -146,7 +144,7 @@ export default function DetalleReservaScreen({ navigation, route }) {
   }
 
   return (
-    <View style={[styles.container, {backgroundColor: colors.background}]}>
+    <View style={[styles.container, {backgroundColor: theme.background}]}>
       <ScrollView style={styles.scrollView} contentContainerStyle={styles.content}>
         {/* Estado de la Reserva */}
         <View style={styles.estadoContainer}>
@@ -164,16 +162,16 @@ export default function DetalleReservaScreen({ navigation, route }) {
 
         {/* Información de la Clase */}
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, {color: colors.text}]}>📚 Clase</Text>
-          <View style={[styles.card, {backgroundColor: colors.card, borderColor: colors.border}]}>
+          <Text style={[styles.sectionTitle, {color: theme.text}]}>📚 Clase</Text>
+          <View style={[styles.card, {backgroundColor: theme.card, borderColor: theme.border}]}>
             {clase.nombre && (
-              <Text style={[styles.disciplinaText, {color: colors.text}]}>{clase.nombre}</Text>
+              <Text style={[styles.disciplinaText, {color: theme.text}]}>{clase.nombre}</Text>
             )}
             {clase.descripcion && (
-              <Text style={[styles.descripcionText, {color: colors.textSecondary}]}>{clase.descripcion}</Text>
+              <Text style={[styles.descripcionText, {color: theme.textSecondary}]}>{clase.descripcion}</Text>
             )}
             {disciplina.nombre && (
-              <Text style={[styles.infoSecondaryText, { marginTop: 8 }, {color: colors.textSecondary}]}>
+              <Text style={[styles.infoSecondaryText, { marginTop: 8 }, {color: theme.textSecondary}]}>
                 Disciplina: {disciplina.nombre}
               </Text>
             )}
@@ -182,34 +180,34 @@ export default function DetalleReservaScreen({ navigation, route }) {
 
         {/* Información del Instructor */}
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, {color: colors.text}]}>👤 Instructor</Text>
-          <View style={[styles.card, {backgroundColor: colors.card, borderColor: colors.border}]}>
-            <Text style={[styles.infoText, {color: colors.text}]}>
+          <Text style={[styles.sectionTitle, {color: theme.text}]}>👤 Instructor</Text>
+          <View style={[styles.card, {backgroundColor: theme.card, borderColor: theme.border}]}>
+            <Text style={[styles.infoText, {color: theme.text}]}>
               {instructor.nombre} {instructor.apellido || ''}
             </Text>
             {instructor.email && (
-              <Text style={[styles.infoSecondaryText, {color: colors.textSecondary}]}>📧 {instructor.email}</Text>
+              <Text style={[styles.infoSecondaryText, {color: theme.textSecondary}]}>📧 {instructor.email}</Text>
             )}
             {instructor.telefono && (
-              <Text style={[styles.infoSecondaryText, {color: colors.textSecondary}]}>📞 {instructor.telefono}</Text>
+              <Text style={[styles.infoSecondaryText, {color: theme.textSecondary}]}>📞 {instructor.telefono}</Text>
             )}
           </View>
         </View>
 
         {/* Información de la Sede */}
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, {color: colors.text}]}>📍 Sede</Text>
-          <View style={[styles.card, {backgroundColor: colors.card, borderColor: colors.border}]}>
-            <Text style={[styles.infoText, {color: colors.text}]}>{sede.nombre || 'No disponible'}</Text>
+          <Text style={[styles.sectionTitle, {color: theme.text}]}>📍 Sede</Text>
+          <View style={[styles.card, {backgroundColor: theme.card, borderColor: theme.border}]}>
+            <Text style={[styles.infoText, {color: theme.text}]}>{sede.nombre || 'No disponible'}</Text>
             {sede.direccion && (
               <>
-                <Text style={[styles.infoSecondaryText, {color: colors.textSecondary}]}>{sede.direccion}</Text>
+                <Text style={[styles.infoSecondaryText, {color: theme.textSecondary}]}>{sede.direccion}</Text>
 
                 <Text style={styles.linkText} onPress={openMaps}>🧭 Como llegar</Text>
               </>
             )}
             {sede.telefono && (
-              <Text style={[styles.infoSecondaryText, {color: colors.textSecondary}]}>📞 {sede.telefono}</Text>
+              <Text style={[styles.infoSecondaryText, {color: theme.textSecondary}]}>📞 {sede.telefono}</Text>
             )}
             
           </View>
@@ -217,11 +215,11 @@ export default function DetalleReservaScreen({ navigation, route }) {
 
         {/* Fecha y Hora */}
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, {color: colors.text}]}>🗓️ Fecha y Hora</Text>
-          <View style={[styles.card, {backgroundColor: colors.card, borderColor: colors.border}]}>
-            <Text style={[styles.infoText, {color: colors.text}]}>{formatearFechaLarga(clase.fechaInicio)}</Text>
+          <Text style={[styles.sectionTitle, {color: theme.text}]}>🗓️ Fecha y Hora</Text>
+          <View style={[styles.card, {backgroundColor: theme.card, borderColor: theme.border}]}>
+            <Text style={[styles.infoText, {color: theme.text}]}>{formatearFechaLarga(clase.fechaInicio)}</Text>
             {clase.fechaInicio && clase.fechaFin && (
-              <Text style={[styles.infoSecondaryText, {color: colors.textSecondary}]}>
+              <Text style={[styles.infoSecondaryText, {color: theme.textSecondary}]}>
                 ⏱️ Horario: {extraerHora(clase.fechaInicio)} - {extraerHora(clase.fechaFin)}
               </Text>
             )}
@@ -231,12 +229,12 @@ export default function DetalleReservaScreen({ navigation, route }) {
         {/* Capacidad */}
         {(clase.cupoActual !== undefined && clase.cupoMaximo !== undefined) && (
           <View style={styles.section}>
-            <Text style={[styles.sectionTitle, {color: colors.text}]}>👥 Capacidad</Text>
-            <View style={[styles.card, {backgroundColor: colors.card, borderColor: colors.border}]}>
-              <Text style={[styles.infoText, {color: colors.text}]}>
+            <Text style={[styles.sectionTitle, {color: theme.text}]}>👥 Capacidad</Text>
+            <View style={[styles.card, {backgroundColor: theme.card, borderColor: theme.border}]}>
+              <Text style={[styles.infoText, {color: theme.text}]}>
                 {clase.cupoActual} / {clase.cupoMaximo} personas
               </Text>
-              <Text style={[styles.infoSecondaryText, {color: colors.textSecondary}]}>
+              <Text style={[styles.infoSecondaryText, {color: theme.textSecondary}]}>
                 {clase.cupoMaximo - clase.cupoActual} lugares disponibles
               </Text>
             </View>
@@ -245,13 +243,13 @@ export default function DetalleReservaScreen({ navigation, route }) {
 
         {/* Información de la Reserva */}
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, {color: colors.text}]}>📋 Información de Reserva</Text>
-          <View style={[styles.card, {backgroundColor: colors.card, borderColor: colors.border}]}>
-            <Text style={[styles.infoSecondaryText, {color: colors.textSecondary}]}>
+          <Text style={[styles.sectionTitle, {color: theme.text}]}>📋 Información de Reserva</Text>
+          <View style={[styles.card, {backgroundColor: theme.card, borderColor: theme.border}]}>
+            <Text style={[styles.infoSecondaryText, {color: theme.textSecondary}]}>
               ID de Reserva: #{reserva.id}
             </Text>
             {reserva.fechaReserva && (
-              <Text style={[styles.infoSecondaryText, {color: colors.textSecondary}]}>
+              <Text style={[styles.infoSecondaryText, {color: theme.textSecondary}]}>
                 Reservado el: {formatearFechaCorta(reserva.fechaReserva)}
               </Text>
             )}

@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import { getClaseById } from '../../services/ClasesService';
 import { ThemeContext } from '../../context/ThemeContext';
-import { lightColors, darkColors } from '../../config/colors';
 
 const ClaseDetail = ({ route, navigation }) => {
   const { claseId } = route.params;
@@ -18,8 +17,7 @@ const ClaseDetail = ({ route, navigation }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const { darkMode } = useContext(ThemeContext);
-  const colors = darkMode ? darkColors : lightColors;
+  const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
     fetchClaseDetail();
@@ -102,15 +100,15 @@ const ClaseDetail = ({ route, navigation }) => {
     <View style={styles.infoRow}>
       <View style={styles.infoLeft}>
         <Text style={styles.infoIcon}>{icon}</Text>
-        <Text style={[styles.infoLabel, { color: colors.text }]}>{label}</Text>
+        <Text style={[styles.infoLabel, { color: theme.text }]}>{label}</Text>
       </View>
-      <Text style={[styles.infoValue, { color: colors.textSecondary }]}>{value}</Text>
+      <Text style={[styles.infoValue, { color: theme.textSecondary }]}>{value}</Text>
     </View>
   );
 
   return (
-    <ScrollView style={[styles.container, { backgroundColor: colors.background }]} contentContainerStyle={styles.contentContainer}>
-      <View style={[styles.card, { backgroundColor: colors.card , borderColor: colors.border }]}>
+    <ScrollView style={[styles.container, { backgroundColor: theme.background }]} contentContainerStyle={styles.contentContainer}>
+      <View style={[styles.card, { backgroundColor: theme.card , borderColor: theme.border }]}>
         <Text style={styles.disciplineName}>{clase.disciplina.nombre}</Text>
 
         <InfoRow
@@ -158,7 +156,7 @@ const ClaseDetail = ({ route, navigation }) => {
         style={[
           styles.reservarButton,
           !clase.disponible && styles.reservarButtonDisabled,
-          { color: colors.background }
+          { color: theme.background }
         ]}
         onPress={handleReservar}
         disabled={!clase.disponible}

@@ -1,23 +1,21 @@
 import React, { useContext } from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
-import { lightColors, darkColors } from '../../config/colors';
 import { ThemeContext } from '../../context/ThemeContext';
 
 const FilterSelector = ({ label, value, onPress }) => {
-  const { darkMode } = useContext(ThemeContext);
-  const colors = darkMode ? darkColors : lightColors;
+  const { theme } = useContext(ThemeContext);
 
   return (
       <TouchableOpacity
         style={[
           styles.filterButton, 
-          { backgroundColor: colors.card, borderColor: colors.border }
+          { backgroundColor: theme.card, borderColor: theme.border }
         ]} 
         onPress={onPress}>
-        <Text style={[styles.filterText, { color: colors.textSecondary }]} numberOfLines={1}>
+        <Text style={[styles.filterText, { color: theme.textSecondary }]} numberOfLines={1}>
           {value || label}
         </Text>
-        <Text style={[styles.filterArrow, { color: colors.textSecondary }]}>▼</Text>
+        <Text style={[styles.filterArrow, { color: theme.textSecondary }]}>▼</Text>
       </TouchableOpacity>
   );
 };

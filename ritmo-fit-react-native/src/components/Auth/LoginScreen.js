@@ -2,14 +2,12 @@ import React, { useContext, useState } from 'react';
 import { View, TextInput, Button, Text, Alert, StyleSheet } from 'react-native';
 import { authService } from '../../services/authService';
 import { ThemeContext } from '../../context/ThemeContext';
-import { lightColors, darkColors } from '../../config/colors';
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const { darkMode } = useContext(ThemeContext);
-  const colors = darkMode ? darkColors : lightColors;
+  const { theme } = useContext(ThemeContext);
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -35,20 +33,20 @@ export default function LoginScreen({ navigation }) {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <Text style={[styles.title, { color: colors.text }]}>Iniciar Sesión</Text>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
+      <Text style={[styles.title, { color: theme.text }]}>Iniciar Sesión</Text>
 
       <TextInput
         style={[
           styles.input,
           {
-            backgroundColor: colors.card,
-            borderColor: colors.border,
-            color: colors.text,
+            backgroundColor: theme.card,
+            borderColor: theme.border,
+            color: theme.text,
           }
         ]}
         placeholder="Email"
-        placeholderTextColor={colors.placeholder}
+        placeholderTextColor={theme.placeholder}
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
@@ -59,13 +57,13 @@ export default function LoginScreen({ navigation }) {
         style={[
           styles.input,
           {
-            backgroundColor: colors.card,
-            borderColor: colors.border,
-            color: colors.text,
+            backgroundColor: theme.card,
+            borderColor: theme.border,
+            color: theme.text,
           }
         ]}
         placeholder="Contraseña"
-        placeholderTextColor={colors.placeholder}
+        placeholderTextColor={theme.placeholder}
         value={password}
         onChangeText={setPassword}
         secureTextEntry
