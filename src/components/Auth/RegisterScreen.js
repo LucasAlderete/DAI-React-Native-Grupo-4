@@ -36,7 +36,7 @@ export default function RegisterScreen({ navigation }) {
 
       Alert.alert('Código enviado', `Se envió un código al correo ${email}`);
 
-      navigation.navigate('VerifyCode', { email }); // no necesitamos nombre ni password
+      navigation.navigate('VerifyCode', { email });
 
     } catch (err) {
       console.error('[REGISTER] Error general:', err);

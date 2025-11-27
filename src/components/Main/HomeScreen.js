@@ -13,7 +13,6 @@ export default function HomeScreen({ navigation }) {
 
   const [hasAlerts, setHasAlerts] = useState(false);
 
-  // 🔔 Cargar alertas cuando entro a Home
   useEffect(() => {
     const load = async () => {
       const data = await AsyncStorage.getItem("local_notifications");

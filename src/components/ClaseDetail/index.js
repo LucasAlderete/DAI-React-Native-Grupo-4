@@ -23,7 +23,6 @@ const ClaseDetail = ({ route, navigation }) => {
 
   useEffect(() => {
     fetchClaseDetail();
-    console.log("Params:", route.params);
     if (reservaId) {
     } else {
     }

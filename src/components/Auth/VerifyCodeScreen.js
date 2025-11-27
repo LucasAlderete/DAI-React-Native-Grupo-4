@@ -21,27 +21,21 @@ const VerifyCodeScreen = ({ route, navigation }) => {
     }
 
     setLoading(true);
-    console.log("📨 Verificando código OTP:", code);
 
     try {
       const data = await authService.verifyOtp(email, code);
-      console.log("📥 Respuesta del backend:", data);
 
       if (data?.token) {
-        console.log("🔑 Token recibido, guardando...");
         await tokenStorage.saveToken(data.token);
 
-        // Usamos los datos reales que vienen del backend
         const usuario = {
           id: data.id,
           email: data.email,
           nombre: data.nombre,
           fotoUrl: data.fotoUrl,
         };
-        console.log("👤 Usuario usado:", usuario);
         await tokenStorage.saveUser(usuario);
 
-        console.log("⚙ Llamando a startPolling() con userId:", usuario.id);
         startPolling(usuario.id);
 
         navigation.replace("MainTabs");
@@ -49,7 +43,6 @@ const VerifyCodeScreen = ({ route, navigation }) => {
         Alert.alert('Atención', 'Código verificado, pero no se recibió token.');
       }
     } catch (err) {
-      console.log("💥 Error en verifyOtp:", err);
       Alert.alert('Error', 'Código inválido o expirado.');
     } finally {
       setLoading(false);
@@ -62,7 +55,6 @@ const VerifyCodeScreen = ({ route, navigation }) => {
       Alert.alert('Éxito', 'Se envió un nuevo código a tu correo.');
     } catch (err) {
       Alert.alert('Error', 'No se pudo reenviar el código.');
-      console.log("💥 Error al reenviar OTP:", err);
     }
   };
 

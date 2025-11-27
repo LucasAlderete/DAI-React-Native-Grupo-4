@@ -1,4 +1,3 @@
-// LoginScreen.js
 import React, { useContext, useState } from 'react';
 import {
   View,
@@ -24,7 +23,6 @@ export default function LoginScreen({ navigation }) {
 
   const handleLogin = async () => {
     try {
-      console.log("🔐 [LOGIN] Intentando iniciar sesión...");
       const res = await apiService.login({ email, password });
       const { token, nombre, email: userEmail, id } = res.data;
 
@@ -33,16 +31,12 @@ export default function LoginScreen({ navigation }) {
 
       const userReal = { id, email: userEmail, nombre };
 
-      console.log("💾 [STORAGE] Guardando usuario:", userReal);
       await tokenStorage.saveToken(token);
       await tokenStorage.saveUser(userReal);
 
-      console.log("🚀 [POLLING] Iniciando startPolling()");
-      startPolling();
+      startPolling(userReal.id);
 
-      console.log("📣 [AUTH-EVENTS] Notificando login");
-      authEvents.notify({ type: 'login' });
-
+      authEvents.emit({ type: 'login' });
 
     } catch (err) {
       Alert.alert('Error', err.response?.data?.mensaje || 'Error al iniciar sesión');
@@ -87,12 +81,12 @@ export default function LoginScreen({ navigation }) {
         secureTextEntry
       />
 
-      {/* BOTÓN LOGIN */}
+
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Iniciar sesión</Text>
       </TouchableOpacity>
 
-      {/* REGISTRO */}
+
       <TouchableOpacity
         style={styles.buttonSecondary}
         onPress={() => navigation.navigate('Register')}
@@ -100,7 +94,7 @@ export default function LoginScreen({ navigation }) {
         <Text style={styles.buttonSecondaryText}>Registrarse</Text>
       </TouchableOpacity>
 
-      {/* OLVIDÓ CONTRASEÑA */}
+
       <TouchableOpacity
         style={styles.buttonLink}
         onPress={() => navigation.navigate('ForgotPassword')}

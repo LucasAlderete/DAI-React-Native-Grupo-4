@@ -2,7 +2,6 @@ import React from "react";
 import * as Notifications from "expo-notifications";
 import { ThemeProvider } from "./src/context/ThemeContext";
 import { NotificationProvider } from "./src/context/NotificationContext";
-import { startPolling } from "./src/workers/pollingService";
 import { registerForPushNotificationsAsync } from "./src/services/notificationsService";
 import { apiService } from "./src/services/apiService";
 
@@ -35,7 +34,6 @@ function AppContainer() {
   React.useEffect(() => {
     registerForPushNotificationsAsync();
     apiService.generateNotifications().catch(() => {});
-    startPolling();
   }, []);
 
   return (

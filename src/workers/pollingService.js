@@ -20,7 +20,6 @@ Notifications.addNotificationResponseReceivedListener(async (response) => {
 });
 
 const showPushNotification = async (notif) => {
-  console.log("📨 [PROCESS] Notificación recibida:", notif);
 
   if (sentNotificationIds.has(notif.id)) {
     return;
