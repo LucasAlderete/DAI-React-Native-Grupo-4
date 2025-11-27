@@ -1,4 +1,3 @@
-// api.js
 import axios from 'axios';
 import { tokenStorage } from './tokenStorage';
 import API_CONFIG from '../config/apiConfig';

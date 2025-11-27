@@ -14,7 +14,6 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { calificarAsistencia } from '../../services/calificacionService';
 import { ThemeContext } from '../../context/ThemeContext';
-import { lightColors, darkColors } from '../../config/colors';
 
 const CalificarScreen = ({ route, navigation }) => {
     const { asistencia } = route.params || {};
@@ -23,8 +22,7 @@ const CalificarScreen = ({ route, navigation }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const { darkMode } = useContext(ThemeContext);
-    const colors = darkMode ? darkColors : lightColors;
+    const { theme } = useContext(ThemeContext);
     
     // Colores adicionales con valores por defecto
     const themeColors = {
@@ -32,8 +30,8 @@ const CalificarScreen = ({ route, navigation }) => {
         primary: '#2563EB',
         error: '#DC2626',
         disabled: '#9CA3AF',
-        cardBackground: colors.card || colors.background,
-        inputBackground: colors.card || colors.background,
+        cardBackground: theme.card || theme.background,
+        inputBackground: theme.card || theme.background,
     };
 
     // Validar que tenemos la asistencia

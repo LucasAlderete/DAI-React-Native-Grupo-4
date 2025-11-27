@@ -2,13 +2,11 @@ import * as LocalAuthentication from 'expo-local-authentication';
 import React, { useEffect, useContext } from 'react';
 import { View, StyleSheet, TouchableOpacity, Text, Alert } from 'react-native';
 import { ThemeContext } from '../../context/ThemeContext';
-import { lightColors, darkColors } from '../../config/colors';
 import { tokenStorage } from '../../services/tokenStorage';
 import { startPolling } from '../../workers/pollingService';
 
 export default function BiometricUnlockScreen({ navigation }) {
-  const { darkMode } = useContext(ThemeContext);
-  const colors = darkMode ? darkColors : lightColors;
+  const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
     (async () => {
@@ -43,8 +41,8 @@ export default function BiometricUnlockScreen({ navigation }) {
   }, [navigation]);
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <Text style={[styles.title, { color: colors.text }]}>Autenticación Biométrica</Text>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
+      <Text style={[styles.title, { color: theme.text }]}>Autenticación Biométrica</Text>
 
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Login')}>
         <Text style={styles.buttonText}>Usar contraseña</Text>

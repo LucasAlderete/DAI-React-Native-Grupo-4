@@ -1,5 +1,6 @@
 import api from './api';
 import API_CONFIG from '../config/apiConfig';
+import { tokenStorage } from './tokenStorage';
 
 export const getUsuario = async () => {
   const response = await api.get('/usuario/perfil');
@@ -8,6 +9,16 @@ export const getUsuario = async () => {
 
 export const updateUsuarioPerfil = async (usuarioData) => {
   const response = await api.put('/usuario/perfil', usuarioData);
+
+  // si back devuelve nuevo token guardarlo
+  if (response.data?.token) {
+    await tokenStorage.saveToken(response.data.token);
+
+    // actualizar axios con el nuevo token
+    api.defaults.headers.common['Authorization'] =
+      `Bearer ${response.data.token}`;
+  }
+
   return response.data;
 };
 

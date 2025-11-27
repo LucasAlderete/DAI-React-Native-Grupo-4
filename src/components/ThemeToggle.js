@@ -2,25 +2,25 @@ import React, { useEffect, useRef } from 'react';
 import { View, TouchableOpacity, StyleSheet, Animated } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
-const ThemeToggle = ({ darkMode, toggleDarkMode }) => {
-  const offsetX = useRef(new Animated.Value(darkMode ? 30 : 3)).current;
+const ThemeToggle = ({ isDarkMode, toggleTheme }) => {
+  const offsetX = useRef(new Animated.Value(isDarkMode ? 30 : 3)).current;
 
   useEffect(() => {
     Animated.spring(offsetX, {
-      toValue: darkMode ? 30 : 3,
+      toValue: isDarkMode ? 30 : 3,
       useNativeDriver: false,
       stiffness: 200,
       damping: 20,
     }).start();
-  }, [darkMode]);
+  }, [isDarkMode]);
 
   return (
     <TouchableOpacity
       activeOpacity={0.8}
-      onPress={toggleDarkMode}
+      onPress={toggleTheme}
       style={[
         styles.switchContainer,
-        { backgroundColor: darkMode ? '#fff' : '#000' },
+        { backgroundColor: isDarkMode ? '#fff' : '#000' },
       ]}
     >
       <Animated.View
@@ -28,11 +28,11 @@ const ThemeToggle = ({ darkMode, toggleDarkMode }) => {
           styles.toggleCircle,
           {
             left: offsetX,
-            backgroundColor: darkMode ? '#000' : '#fff',
+            backgroundColor: isDarkMode ? '#000' : '#fff',
           },
         ]}
       >
-        {darkMode ? (
+        {isDarkMode ? (
           <AntDesign name="sun" size={18} color="#fff" />
         ) : (
           <AntDesign name="moon" size={18} color="#000" />

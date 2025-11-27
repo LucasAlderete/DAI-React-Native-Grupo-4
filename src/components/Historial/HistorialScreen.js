@@ -5,7 +5,6 @@ import { getHistorialAsistencias, formatDateForBackend } from '../../services/hi
 import AsistenciaCard from './AsistenciaCard';
 import DateRangeFilter from './DateRangeFilter';
 import { ThemeContext } from '../../context/ThemeContext';
-import { lightColors, darkColors } from '../../config/colors';
 
 const HistorialScreen = ({ navigation }) => {
     // ========================================
@@ -22,8 +21,7 @@ const HistorialScreen = ({ navigation }) => {
     const [fechaFin, setFechaFin] = useState(null);
     const [isInitialLoad, setIsInitialLoad] = useState(true);
 
-    const { darkMode } = useContext(ThemeContext);
-    const colors = darkMode ? darkColors : lightColors;
+    const { theme } = useContext(ThemeContext);
 
     // ========================================
     // EFECTO: Cargar datos al montar
@@ -165,17 +163,17 @@ const HistorialScreen = ({ navigation }) => {
     // RENDER PRINCIPAL
     // ========================================
     return (
-        <View style={[styles.container, { backgroundColor: colors.background }]}>
+        <View style={[styles.container, { backgroundColor: theme.background }]}>
             <View 
             style={[
                 styles.header,
                 {
-                    backgroundColor: colors.background,
-                    borderBottomColor: colors.headerBorder,
+                    backgroundColor: theme.background,
+                    borderBottomColor: theme.headerBorder,
                 },
             ]}
             >
-                <Text style={[styles.title, { color: colors.text }]}>Historial de asistencias</Text>
+                <Text style={[styles.title, { color: theme.text }]}>Historial de asistencias</Text>
             </View>
 
             <DateRangeFilter
@@ -200,7 +198,7 @@ const HistorialScreen = ({ navigation }) => {
                 }
                 ListEmptyComponent={
                     <View style={styles.emptyContainer}>
-                        <Text style={[styles.emptyText, {color: colors.textSecondary}]}>No hay asistencias registradas</Text>
+                        <Text style={[styles.emptyText, {color: theme.textSecondary}]}>No hay asistencias registradas</Text>
                     </View>
                 }
             />

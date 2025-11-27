@@ -2,7 +2,6 @@ import React, { useContext, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { authService } from '../../services/authService';
 import { ThemeContext } from '../../context/ThemeContext';
-import { lightColors, darkColors } from '../../config/colors';
 import { tokenStorage } from '../../services/tokenStorage';
 import { startPolling } from '../../workers/pollingService';
 
@@ -11,8 +10,7 @@ const VerifyCodeScreen = ({ route, navigation }) => {
   const [code, setCode] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const { darkMode } = useContext(ThemeContext);
-  const colors = darkMode ? darkColors : lightColors;
+  const { theme } = useContext(ThemeContext);
 
   const handleVerify = async () => {
     if (!code.trim()) {
@@ -59,14 +57,14 @@ const VerifyCodeScreen = ({ route, navigation }) => {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <Text style={[styles.title, { color: colors.text }]}>Verificar código</Text>
-      <Text style={[styles.subtitle, { color: colors.text }]}>Hemos enviado un código a tu correo: {email}</Text>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
+      <Text style={[styles.title, { color: theme.text }]}>Verificar código</Text>
+      <Text style={[styles.subtitle, { color: theme.text }]}>Hemos enviado un código a tu correo: {email}</Text>
 
       <TextInput
-        style={[styles.input, { backgroundColor: colors.card, borderColor: colors.border, color: colors.text }]}
+        style={[styles.input, { backgroundColor: theme.card, borderColor: theme.border, color: theme.text }]}
         placeholder="Ingresá el código"
-        placeholderTextColor={colors.placeholder}
+        placeholderTextColor={theme.placeholder}
         keyboardType="number-pad"
         value={code}
         onChangeText={setCode}

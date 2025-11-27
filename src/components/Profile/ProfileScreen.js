@@ -19,7 +19,6 @@ import {
 import { authService } from '../../services/authService';
 import { ThemeContext } from '../../context/ThemeContext';
 import ThemeToggle from '../ThemeToggle';
-import { lightColors, darkColors } from '../../config/colors';
 
 const ProfileScreen = ({ navigation }) => {
   const [usuario, setUsuario] = useState(null);
@@ -29,8 +28,7 @@ const ProfileScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const { darkMode, toggleDarkMode } = useContext(ThemeContext);
-  const colors = darkMode ? darkColors : lightColors;
+  const { theme, isDarkMode, toggleTheme } = useContext(ThemeContext);
 
   useEffect(() => {
     fetchPerfil();
@@ -148,19 +146,19 @@ const ProfileScreen = ({ navigation }) => {
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
 
       <View 
         style={[
           styles.header,
           {
-            backgroundColor: colors.card,
-            borderBottomColor: colors.headerBorder,
+            backgroundColor: theme.card,
+            borderBottomColor: theme.headerBorder,
           },
         ]}
       >
-        <Text style={[styles.title, { color: colors.text }]}>Mi Perfil</Text>
-        <ThemeToggle darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+        <Text style={[styles.title, { color: theme.text }]}>Mi Perfil</Text>
+        <ThemeToggle isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
       </View>
 
       <View style={styles.content}>
@@ -172,37 +170,37 @@ const ProfileScreen = ({ navigation }) => {
           />
         </TouchableOpacity>
 
-        <Text style={[styles.label, { color: colors.textSecondary }]}>Nombre</Text>
+        <Text style={[styles.label, { color: theme.textSecondary }]}>Nombre</Text>
         <TextInput
           style={[
             styles.input,
             {
-              backgroundColor: colors.card,
-              color: colors.text,
-              borderColor: colors.border,
+              backgroundColor: theme.card,
+              color: theme.text,
+              borderColor: theme.border,
             },
           ]}
           value={nombre}
           onChangeText={setNombre}
           placeholder="Tu nombre"
-          placeholderTextColor={colors.placeholder}
+          placeholderTextColor={theme.placeholder}
         />
 
-        <Text style={[styles.label, { color: colors.textSecondary }]}>Email</Text>
+        <Text style={[styles.label, { color: theme.textSecondary }]}>Email</Text>
         <TextInput
           style={[
             styles.input,
             {
-              backgroundColor: colors.card,
-              color: colors.text,
-              borderColor: colors.border,
+              backgroundColor: theme.card,
+              color: theme.text,
+              borderColor: theme.border,
             },
           ]}
           value={email}
           onChangeText={setEmail}
           keyboardType="email-address"
           placeholder="Tu email"
-          placeholderTextColor={colors.placeholder}
+          placeholderTextColor={theme.placeholder}
         />
 
         <TouchableOpacity

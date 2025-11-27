@@ -10,7 +10,6 @@ import {
 
 import { apiService } from '../../services/apiService';
 import { ThemeContext } from '../../context/ThemeContext';
-import { lightColors, darkColors } from '../../config/colors';
 import { tokenStorage } from '../../services/tokenStorage';
 import { startPolling } from '../../workers/pollingService';
 import { authEvents } from '../../services/authService';
@@ -18,8 +17,8 @@ import { authEvents } from '../../services/authService';
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { darkMode } = useContext(ThemeContext);
-  const colors = darkMode ? darkColors : lightColors;
+  
+  const { theme } = useContext(ThemeContext);
 
   const handleLogin = async () => {
     try {
@@ -45,20 +44,20 @@ export default function LoginScreen({ navigation }) {
 
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <Text style={[styles.title, { color: colors.text }]}>Iniciar Sesión</Text>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
+      <Text style={[styles.title, { color: theme.text }]}>Iniciar Sesión</Text>
 
       <TextInput
         style={[
           styles.input,
           {
-            backgroundColor: colors.card,
-            borderColor: colors.border,
-            color: colors.text,
+            backgroundColor: theme.card,
+            borderColor: theme.border,
+            color: theme.text,
           },
         ]}
         placeholder="Email"
-        placeholderTextColor={colors.placeholder}
+        placeholderTextColor={theme.placeholder}
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
@@ -69,13 +68,13 @@ export default function LoginScreen({ navigation }) {
         style={[
           styles.input,
           {
-            backgroundColor: colors.card,
-            borderColor: colors.border,
-            color: colors.text,
+            backgroundColor: theme.card,
+            borderColor: theme.border,
+            color: theme.text,
           },
         ]}
         placeholder="Contraseña"
-        placeholderTextColor={colors.placeholder}
+        placeholderTextColor={theme.placeholder}
         value={password}
         onChangeText={setPassword}
         secureTextEntry
@@ -99,7 +98,7 @@ export default function LoginScreen({ navigation }) {
         style={styles.buttonLink}
         onPress={() => navigation.navigate('ForgotPassword')}
       >
-        <Text style={[styles.buttonLinkText, { color: colors.text }]}>
+        <Text style={[styles.buttonLinkText, { color: theme.text }]}>
           Olvidé mi contraseña
         </Text>
       </TouchableOpacity>

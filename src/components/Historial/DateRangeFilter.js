@@ -2,7 +2,6 @@ import React, { useContext, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import { ThemeContext } from '../../context/ThemeContext';
-import { lightColors, darkColors } from '../../config/colors';
 
 const DateRangeFilter = ({ fechaInicio, fechaFin, onApplyFilter, onClearFilter }) => {
     const [showModal, setShowModal] = useState(false);
@@ -10,8 +9,7 @@ const DateRangeFilter = ({ fechaInicio, fechaFin, onApplyFilter, onClearFilter }
     const [tempFechaInicio, setTempFechaInicio] = useState(fechaInicio);
     const [tempFechaFin, setTempFechaFin] = useState(fechaFin);
 
-    const { darkMode } = useContext(ThemeContext);
-    const colors = darkMode ? darkColors : lightColors;
+    const { theme } = useContext(ThemeContext);
 
     const formatDisplayDate = (date) => {
         if (!date) return 'Seleccionar';
@@ -73,20 +71,20 @@ const DateRangeFilter = ({ fechaInicio, fechaFin, onApplyFilter, onClearFilter }
     const hasFilters = tempFechaInicio || tempFechaFin;
 
     return (
-        <View style={[styles.container, { backgroundColor: colors.card, borderColor: colors.border }]}>
-            <Text style={[styles.title, { color: colors.text }]}>Filtrar por fecha</Text>
+        <View style={[styles.container, { backgroundColor: theme.card, borderColor: theme.border }]}>
+            <Text style={[styles.title, { color: theme.text }]}>Filtrar por fecha</Text>
 
             <View style={styles.dateSelectorsRow}>
                 <View style={styles.dateSelector}>
-                    <Text style={[styles.label, { color: colors.textSecondary }]}>Desde</Text>
+                    <Text style={[styles.label, { color: theme.textSecondary }]}>Desde</Text>
                     <TouchableOpacity
-                        style={[styles.dateButton, { backgroundColor: colors.card, borderColor: colors.border }]}
+                        style={[styles.dateButton, { backgroundColor: theme.card, borderColor: theme.border }]}
                         onPress={() => openDatePicker('inicio')}
                     >
                         <Text style={[
                             styles.dateButtonText, 
                             tempFechaInicio && styles.dateButtonTextSelected,
-                            {color: colors.textSecondary}
+                            {color: theme.textSecondary}
                             ]}>
                             {formatDisplayDate(tempFechaInicio)}
                         </Text>
@@ -94,15 +92,15 @@ const DateRangeFilter = ({ fechaInicio, fechaFin, onApplyFilter, onClearFilter }
                 </View>
 
                 <View style={styles.dateSelector}>
-                    <Text style={[styles.label, { color: colors.textSecondary }]}>Hasta</Text>
+                    <Text style={[styles.label, { color: theme.textSecondary }]}>Hasta</Text>
                     <TouchableOpacity
-                        style={[styles.dateButton, { backgroundColor: colors.card, borderColor: colors.border}]}
+                        style={[styles.dateButton, { backgroundColor: theme.card, borderColor: theme.border}]}
                         onPress={() => openDatePicker('fin')}
                     >
                         <Text style={[
                             styles.dateButtonText, 
                             tempFechaFin && styles.dateButtonTextSelected,
-                            {color: colors.textSecondary}
+                            {color: theme.textSecondary}
                             ]}>
                             {formatDisplayDate(tempFechaFin)}
                         </Text>

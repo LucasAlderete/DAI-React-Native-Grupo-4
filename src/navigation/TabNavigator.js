@@ -19,7 +19,6 @@ import CalificarScreen from "../components/Historial/CalificarScreen";
 
 // Tema
 import { ThemeContext } from '../context/ThemeContext';
-import { lightColors, darkColors } from '../config/colors';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -133,8 +132,7 @@ const HistorialStack = () => {
 const TabNavigator = () => {
   const insets = useSafeAreaInsets();
 
-  const { darkMode } = useContext(ThemeContext);
-  const colors = darkMode ? darkColors : lightColors;
+  const { theme } = useContext(ThemeContext);
   
   return (
     <Tab.Navigator
@@ -143,9 +141,9 @@ const TabNavigator = () => {
         tabBarInactiveTintColor: "#6B7280",
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: colors.background,
+          backgroundColor: theme.background,
           borderTopWidth: 1,
-          borderTopColor: colors.border,
+          borderTopColor: theme.border,
           paddingBottom: Math.max(insets.bottom, 5) + 5,
           paddingTop: 5,
           height: 60 + Math.max(insets.bottom, 5),

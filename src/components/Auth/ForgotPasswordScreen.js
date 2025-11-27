@@ -2,13 +2,11 @@ import React, { useContext, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { authService } from '../../services/authService';
 import { ThemeContext } from '../../context/ThemeContext';
-import { lightColors, darkColors } from '../../config/colors';
 
 export default function ForgotPasswordScreen({ navigation }) {
   const [email, setEmail] = useState('');
 
-  const { darkMode } = useContext(ThemeContext);
-  const colors = darkMode ? darkColors : lightColors;
+  const { theme } = useContext(ThemeContext);
 
   const handleSend = async () => {
     if (!email) {
@@ -33,16 +31,16 @@ export default function ForgotPasswordScreen({ navigation }) {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <Text style={[styles.title, { color: colors.text }]}>Recuperar contraseña</Text>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
+      <Text style={[styles.title, { color: theme.text }]}>Recuperar contraseña</Text>
 
       <TextInput
         style={[
           styles.input,
-          { backgroundColor: colors.card, borderColor: colors.border, color: colors.text },
+          { backgroundColor: theme.card, borderColor: theme.border, color: theme.text },
         ]}
         placeholder="Correo electrónico"
-        placeholderTextColor={colors.placeholder}
+        placeholderTextColor={theme.placeholder}
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"

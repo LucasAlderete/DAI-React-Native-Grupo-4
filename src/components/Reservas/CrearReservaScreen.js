@@ -14,7 +14,6 @@ import { getClases } from '../../services/ClasesService';
 import reservasService from '../../services/reservasService';
 import { extraerHora } from '../../utils/dateFormatter';
 import { ThemeContext } from '../../context/ThemeContext';
-import { lightColors, darkColors } from '../../config/colors';
 
 export default function CrearReservaScreen({ navigation }) {
   const [clases, setClases] = useState([]);
@@ -23,8 +22,7 @@ export default function CrearReservaScreen({ navigation }) {
   const [reservando, setReservando] = useState(false);
   const [searchText, setSearchText] = useState('');
 
-  const { darkMode } = useContext(ThemeContext);
-  const colors = darkMode ? darkColors : lightColors;
+  const { theme } = useContext(ThemeContext);
 
   useEffect(() => {
     cargarClases();
@@ -166,11 +164,11 @@ export default function CrearReservaScreen({ navigation }) {
     const hayLugar = lugaresDisponibles > 0;
 
     return (
-      <View style={[styles.claseCard, {backgroundColor: colors.card, borderColor: colors.border}]}>
+      <View style={[styles.claseCard, {backgroundColor: theme.card, borderColor: theme.border}]}>
         <View style={styles.cardHeader}>
           <View style={styles.headerLeft}>
-            <Text style={[styles.disciplinaText, {color: colors.text}]}>{item.nombre || disciplina.nombre || 'Clase'}</Text>
-            <Text style={[styles.instructorText, {color: colors.textSecondary}]}>
+            <Text style={[styles.disciplinaText, {color: theme.text}]}>{item.nombre || disciplina.nombre || 'Clase'}</Text>
+            <Text style={[styles.instructorText, {color: theme.textSecondary}]}>
               👤 {instructor.nombre} {instructor.apellido || ''}
             </Text>
           </View>
@@ -187,28 +185,28 @@ export default function CrearReservaScreen({ navigation }) {
         </View>
 
         <View style={styles.cardBody}>
-          <Text style={[styles.sedeText, {color: colors.textSecondary}]}>📍 {sede.nombre || 'Sede'}</Text>
-          <Text style={[styles.direccionText, {color: colors.textSecondary}]}>
+          <Text style={[styles.sedeText, {color: theme.textSecondary}]}>📍 {sede.nombre || 'Sede'}</Text>
+          <Text style={[styles.direccionText, {color: theme.textSecondary}]}>
             {sede.direccion || 'Dirección no disponible'}
           </Text>
-          <Text style={[styles.fechaText, {color: colors.textSecondary}]}>
+          <Text style={[styles.fechaText, {color: theme.textSecondary}]}>
             🗓️ {formatearFecha(item.fechaInicio)}
           </Text>
           {item.fechaInicio && item.fechaFin && (
-            <Text style={[styles.duracionText, {color: colors.textSecondary}]}>
+            <Text style={[styles.duracionText, {color: theme.textSecondary}]}>
               ⏱️ {extraerHora(item.fechaInicio)} - {extraerHora(item.fechaFin)}
             </Text>
           )}
           {disciplina.descripcion && (
-            <Text style={[styles.descripcionText, {color: colors.textSecondary}]} numberOfLines={2}>
+            <Text style={[styles.descripcionText, {color: theme.textSecondary}]} numberOfLines={2}>
               {disciplina.descripcion}
             </Text>
           )}
         </View>
 
-        <View style={[styles.cardFooter, {borderTopColor: colors.border}]}>
+        <View style={[styles.cardFooter, {borderTopColor: theme.border}]}>
           <View>
-            <Text style={[styles.lugaresText, {color: colors.textSecondary}]}>
+            <Text style={[styles.lugaresText, {color: theme.textSecondary}]}>
               {hayLugar
                 ? `${lugaresDisponibles} lugar${lugaresDisponibles !== 1 ? 'es' : ''} disponible${lugaresDisponibles !== 1 ? 's' : ''}`
                 : 'Sin lugares disponibles'}
@@ -245,7 +243,7 @@ export default function CrearReservaScreen({ navigation }) {
 
   if (loading) {
     return (
-      <View style={[styles.loadingContainer, {backgroundColor: colors.background}]}>
+      <View style={[styles.loadingContainer, {backgroundColor: theme.background}]}>
         <ActivityIndicator size="large" color="#007bff" />
         <Text style={styles.loadingText}>Cargando clases...</Text>
       </View>
@@ -253,12 +251,12 @@ export default function CrearReservaScreen({ navigation }) {
   }
 
   return (
-    <View style={[styles.container, {backgroundColor: colors.background}]}>
-      <View style={[styles.searchContainer, {backgroundColor: colors.background, borderBottomColor: colors.border}]}>
+    <View style={[styles.container, {backgroundColor: theme.background}]}>
+      <View style={[styles.searchContainer, {backgroundColor: theme.background, borderBottomColor: theme.border}]}>
         <TextInput
-          style={[styles.searchInput, {backgroundColor: colors.card, borderColor: colors.border}]}
+          style={[styles.searchInput, {backgroundColor: theme.card, borderColor: theme.border}]}
           placeholder="Buscar por disciplina, instructor o sede..."
-          placeholderTextColor= {colors.placeholder}
+          placeholderTextColor= {theme.placeholder}
           value={searchText}
           onChangeText={setSearchText}
         />

@@ -2,14 +2,12 @@ import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ThemeContext } from '../../context/ThemeContext';
-import { lightColors, darkColors } from '../../config/colors';
 
 const NOTIFICATIONS_KEY = "local_notifications";
 
 export default function HomeScreen({ navigation }) {
 
-  const { darkMode } = useContext(ThemeContext);
-  const colors = darkMode ? darkColors : lightColors;
+  const { theme } = useContext(ThemeContext);
 
   const [hasAlerts, setHasAlerts] = useState(false);
 
@@ -36,9 +34,9 @@ export default function HomeScreen({ navigation }) {
   }, []);
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <View style={[styles.container, { backgroundColor: theme.background }]}>
 
-      <Text style={[styles.title, { color: colors.text }]}>
+      <Text style={[styles.title, { color: theme.text }]}>
         Bienvenido a RitmoFit 🏋️‍♂️
       </Text>
 
@@ -52,13 +50,13 @@ export default function HomeScreen({ navigation }) {
         style={[
           styles.input,
           {
-            backgroundColor: colors.card,
-            borderColor: colors.border,
-            color: colors.text,
+            backgroundColor: theme.card,
+            borderColor: theme.border,
+            color: theme.text,
           }
         ]}
         placeholder="Buscar clase..."
-        placeholderTextColor={colors.placeholder}
+        placeholderTextColor={theme.placeholder}
       />
 
       <TouchableOpacity
