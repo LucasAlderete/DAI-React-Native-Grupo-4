@@ -115,7 +115,9 @@ export default function MisReservasScreen({ navigation }) {
   };
 
   const getEstadoTexto = (estado) => {
-    return estado || 'Confirmada';
+    if (!estado) return 'RESERVADA';
+    if (estado.toLowerCase() === 'confirmada') return 'RESERVADA';
+    return estado;
   };
 
   const renderReservaItem = ({ item }) => {

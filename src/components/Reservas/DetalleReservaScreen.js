@@ -89,7 +89,11 @@ export default function DetalleReservaScreen({ navigation, route }) {
     }
   };
 
-  const getEstadoTexto = (estado) => estado || 'Confirmada';
+  const getEstadoTexto = (estado) => {
+    if (!estado) return 'RESERVADA';
+    if (estado.toLowerCase() === 'confirmada') return 'RESERVADA';
+    return estado;
+  };
 
   const handleCancelarReserva = () => {
     Alert.alert(
