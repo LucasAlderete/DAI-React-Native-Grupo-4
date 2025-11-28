@@ -17,6 +17,10 @@ import CrearReservaScreen from "../components/Reservas/CrearReservaScreen";
 import HistorialScreen from "../components/Historial/HistorialScreen";
 import CalificarScreen from "../components/Historial/CalificarScreen";
 
+// Pantallas de Check-in
+import QRScannerScreen from "../components/Checkin/QRScannerScreen";
+import CheckinSuccessScreen from "../components/Checkin/CheckinSuccessScreen";
+
 // Tema
 import { ThemeContext } from '../context/ThemeContext';
 
@@ -102,6 +106,44 @@ const ReservasStack = () => {
   );
 };
 
+const CheckinStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="QRScanner"
+        component={QRScannerScreen}
+        options={{
+          title: "Escanear QR",
+          headerShown: true,
+          headerStyle: {
+            backgroundColor: '#FFFFFF',
+          },
+          headerTintColor: '#2563EB',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="CheckinSuccess"
+        component={CheckinSuccessScreen}
+        options={{
+          title: "Check-in Exitoso",
+          headerShown: true,
+          headerLeft: null, // Evita que el usuario vuelva atrás
+          headerStyle: {
+            backgroundColor: '#FFFFFF',
+          },
+          headerTintColor: '#2563EB',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+        }}
+      />
+    </Stack.Navigator>
+  );
+};
+
 const HistorialStack = () => {
   return (
     <Stack.Navigator>
@@ -113,7 +155,7 @@ const HistorialStack = () => {
       <Stack.Screen
         name="Calificar"
         component={CalificarScreen}
-        options={{ 
+        options={{
           title: "Calificar Clase",
           headerShown: true,
           headerStyle: {
@@ -167,7 +209,7 @@ const TabNavigator = () => {
       <Tab.Screen
         name="Reservas"
         component={ReservasStack}
-        options={{ 
+        options={{
           tabBarLabel: "Reservas",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="book" size={size || 24} color={color} />
@@ -175,9 +217,19 @@ const TabNavigator = () => {
         }}
       />
       <Tab.Screen
+        name="Checkin"
+        component={CheckinStack}
+        options={{
+          tabBarLabel: "Escanear",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="qr-code" size={size || 24} color={color} />
+          )
+        }}
+      />
+      <Tab.Screen
         name="Historial"
         component={HistorialStack}
-        options={{ 
+        options={{
           tabBarLabel: "Historial",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="time" size={size || 24} color={color} />
