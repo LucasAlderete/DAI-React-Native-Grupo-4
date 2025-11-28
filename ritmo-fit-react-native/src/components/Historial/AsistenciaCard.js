@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { parseApiDate } from '../../services/dateUtils';
 
 /**
@@ -9,7 +10,7 @@ import { parseApiDate } from '../../services/dateUtils';
  * - duracionMinutos (no duracion)
  * - clase.sede.nombre (sede está dentro de clase)
  */
-const AsistenciaCard = ({ asistencia }) => {
+const AsistenciaCard = ({ asistencia, navigation }) => {
     // Validación: Si no hay asistencia, no renderizar nada
     if (!asistencia) {
         console.warn('⚠️ AsistenciaCard recibió asistencia undefined');
@@ -86,6 +87,25 @@ const AsistenciaCard = ({ asistencia }) => {
                     </Text>
                 </View>
             )}
+
+            {/* Comentario (si existe) */}
+            {asistencia.comentario && (
+                <View style={styles.comentarioContainer}>
+                    <Text style={styles.label}>Comentario:</Text>
+                    <Text style={styles.comentario}>{asistencia.comentario}</Text>
+                </View>
+            )}
+
+            {/* Botón de calificar (solo si no tiene calificación y hay navegación) */}
+            {!asistencia.calificacion && navigation && (
+                <TouchableOpacity
+                    style={styles.calificarButton}
+                    onPress={() => navigation.navigate('Calificar', { asistencia })}
+                >
+                    <Ionicons name="star-outline" size={18} color="#FFFFFF" />
+                    <Text style={styles.calificarButtonText}>Calificar</Text>
+                </TouchableOpacity>
+            )}
         </View>
     );
 };
@@ -126,6 +146,32 @@ const styles = StyleSheet.create({
     value: {
         fontSize: 14,
         color: '#1F2937',
+    },
+    comentarioContainer: {
+        marginTop: 8,
+        marginBottom: 4,
+    },
+    comentario: {
+        fontSize: 14,
+        color: '#1F2937',
+        fontStyle: 'italic',
+        marginTop: 4,
+    },
+    calificarButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#2563EB',
+        paddingVertical: 10,
+        paddingHorizontal: 16,
+        borderRadius: 8,
+        marginTop: 12,
+    },
+    calificarButtonText: {
+        color: '#FFFFFF',
+        fontSize: 14,
+        fontWeight: '600',
+        marginLeft: 6,
     },
 });
 
