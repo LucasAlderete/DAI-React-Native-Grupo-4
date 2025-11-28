@@ -14,7 +14,10 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.gonzaloacosta.ritmofitreactnative"
+      "bundleIdentifier": "com.gonzaloacosta.ritmofitreactnative",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Necesitamos acceso a la cámara para escanear códigos QR de check-in en el gimnasio."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -22,18 +25,29 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.gonzaloacosta.ritmofitreactnative"
+      "package": "com.gonzaloacosta.ritmofitreactnative",
+      "permissions": [
+        "CAMERA",
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "2daca1a8-19ef-44d3-8fa6-5c5e4188bc87"
+        "projectId": "80c45c07-770b-485b-8953-9f330b78488e"
       }
     },
     "plugins": [
-      "expo-background-task"
+      "expo-background-task",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Necesitamos acceso a la cámara para escanear códigos QR de check-in."
+        }
+      ]
     ]
   }
 }
