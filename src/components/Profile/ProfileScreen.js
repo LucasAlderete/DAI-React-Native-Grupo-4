@@ -54,6 +54,22 @@ const ProfileScreen = ({ navigation }) => {
 
   const handleUpdatePerfil = async () => {
     if (!usuario) return;
+
+    // Validaciones
+    const nameRegex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!nombre || !nameRegex.test(nombre)) {
+      Alert.alert('Error', 'El nombre solo puede contener letras y espacios.');
+      return;
+    }
+
+    if (!email || !emailRegex.test(email)) {
+      Alert.alert('Error', 'Ingresa un email válido.');
+      return;
+    }
+    //
+
     try {
       const updatedData = {};
       if (nombre !== usuario.nombre) updatedData.nombre = nombre;
@@ -315,4 +331,5 @@ const styles = StyleSheet.create({
 });
 
 export default ProfileScreen;
+
 
