@@ -63,6 +63,12 @@ export default function HomeScreen({ navigation }) {
               await AsyncStorage.setItem(CALIFICACIONES_COUNT_KEY, cantidadActual.toString());
               // Si hay nuevas calificaciones, resetear el estado de cerrado
               await AsyncStorage.removeItem(CALIFICACIONES_BANNER_CLOSED_KEY);
+            } else if (cantidadActual < parseInt(cantidadAnterior || '0', 10)) {
+              // Si la cantidad disminuyó (se calificó una clase), actualizar el contador
+              // y resetear el estado para que pueda volver a aparecer si quedan más
+              await AsyncStorage.setItem(CALIFICACIONES_COUNT_KEY, cantidadActual.toString());
+              await AsyncStorage.removeItem(CALIFICACIONES_BANNER_CLOSED_KEY);
+              setShowCalificacionesBanner(true);
             } else if (bannerCerrado) {
               // Si la cantidad es la misma y el banner fue cerrado, mantenerlo cerrado
               setShowCalificacionesBanner(false);

@@ -10,8 +10,11 @@ import { ThemeContext } from '../../context/ThemeContext';
  * - fechaAsistencia (no fechaHora)
  * - duracionMinutos (no duracion)
  * - clase.sede.nombre (sede está dentro de clase)
+ * @param {Object} asistencia - Los datos de la asistencia
+ * @param {Object} navigation - Objeto de navegación de React Navigation
+ * @param {boolean} esCalificable - Indica si la asistencia puede ser calificada (check-in hecho y dentro de 24hs)
  */
-const AsistenciaCard = ({ asistencia, navigation }) => {
+const AsistenciaCard = ({ asistencia, navigation, esCalificable = false }) => {
     const { theme } = useContext(ThemeContext);
 
     // Validación: Si no hay asistencia, no renderizar nada
@@ -99,8 +102,8 @@ const AsistenciaCard = ({ asistencia, navigation }) => {
                 </View>
             )}
 
-            {/* Botón de calificar (solo si no tiene calificación y hay navegación) */}
-            {!asistencia.calificacion && navigation && (
+            {/* Botón de calificar (solo si es calificable: check-in hecho y dentro de 24hs) */}
+            {esCalificable && navigation && (
                 <TouchableOpacity
                     style={styles.calificarButton}
                     onPress={() => navigation.navigate('Calificar', { asistencia })}

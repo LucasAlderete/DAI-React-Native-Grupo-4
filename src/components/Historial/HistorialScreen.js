@@ -1,16 +1,18 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import { View, Text, FlatList, StyleSheet, ActivityIndicator, TouchableOpacity, RefreshControl } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { getHistorialAsistencias, formatDateForBackend } from '../../services/historialService';
+import { getAsistenciasCalificables } from '../../services/calificacionService';
 import AsistenciaCard from './AsistenciaCard';
 import DateRangeFilter from './DateRangeFilter';
 import { ThemeContext } from '../../context/ThemeContext';
 
 const HistorialScreen = ({ navigation }) => {
     // ========================================
-    // ESTADOS
+    // ESTADOS Y REFS
     // ========================================
     const [asistencias, setAsistencias] = useState([]);
+    const [asistenciasCalificablesIds, setAsistenciasCalificablesIds] = useState(new Set());
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
     const [loadingMore, setLoadingMore] = useState(false);
@@ -20,6 +22,7 @@ const HistorialScreen = ({ navigation }) => {
     const [fechaInicio, setFechaInicio] = useState(null);
     const [fechaFin, setFechaFin] = useState(null);
     const [isInitialLoad, setIsInitialLoad] = useState(true);
+    const [shouldReloadOnFocus, setShouldReloadOnFocus] = useState(false);
 
     const { theme } = useContext(ThemeContext);
 
@@ -27,8 +30,11 @@ const HistorialScreen = ({ navigation }) => {
     // EFECTO: Cargar datos al montar
     // ========================================
     useEffect(() => {
+        console.log('🟢 useEffect - Montaje inicial del componente');
         fetchHistorial();
         setIsInitialLoad(false);
+        // Después de la carga inicial, habilitar recarga en foco
+        setShouldReloadOnFocus(true);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -47,12 +53,18 @@ const HistorialScreen = ({ navigation }) => {
     // ========================================
     useFocusEffect(
         React.useCallback(() => {
-            // Solo refrescar si no es la carga inicial
-            if (!isInitialLoad) {
-                fetchHistorial(true, false);
+            console.log(`🔵 HistorialScreen recibió foco - shouldReloadOnFocus: ${shouldReloadOnFocus}`);
+            
+            if (!shouldReloadOnFocus) {
+                console.log('🔵 Primera carga - NO recargar');
+                return;
             }
+            
+            console.log('🔄 Recargando datos porque volvió a la pantalla...');
+            fetchHistorial(true, false);
+            
             // eslint-disable-next-line react-hooks/exhaustive-deps
-        }, [fechaInicio, fechaFin])
+        }, [shouldReloadOnFocus])
     );
 
     // ========================================
@@ -60,6 +72,7 @@ const HistorialScreen = ({ navigation }) => {
     // ========================================
 
     const fetchHistorial = async (resetPage = true, isRefresh = false) => {
+        console.log(`📥 fetchHistorial llamado - resetPage: ${resetPage}, isRefresh: ${isRefresh}`);
         try {
             // Solo mostrar loading completo si no es un refresh
             if (!isRefresh) {
@@ -75,7 +88,14 @@ const HistorialScreen = ({ navigation }) => {
             if (fechaInicio) filtros.fechaInicio = formatDateForBackend(fechaInicio);
             if (fechaFin) filtros.fechaFin = formatDateForBackend(fechaFin);
 
-            const response = await getHistorialAsistencias(filtros);
+            // Cargar historial y asistencias calificables en paralelo
+            const [response, calificablesResponse] = await Promise.all([
+                getHistorialAsistencias(filtros),
+                getAsistenciasCalificables({ page: 0, size: 1000 }).catch(err => {
+                    console.warn('⚠️ Error al cargar asistencias calificables:', err);
+                    return { content: [] }; // Retornar estructura vacía si falla
+                })
+            ]);
 
             // 🔍 LOGGING TEMPORAL PARA DEBUGGING - Puedes comentar esto después
             console.log('📊 ========== RESPUESTA DEL BACKEND ==========');
@@ -99,7 +119,33 @@ const HistorialScreen = ({ navigation }) => {
             }
             console.log('📊 ==========================================');
 
+            // Crear Set con los IDs de asistencias calificables
+            // Asegurar que los IDs sean del mismo tipo (números)
+            const calificablesIds = new Set(
+                (calificablesResponse.content || []).map(asistencia => 
+                    typeof asistencia.id === 'string' ? parseInt(asistencia.id) : asistencia.id
+                )
+            );
+            
+            console.log('⭐ ========== ASISTENCIAS CALIFICABLES ==========');
+            console.log('⭐ Total calificables:', calificablesIds.size);
+            console.log('⭐ IDs calificables:', Array.from(calificablesIds));
+            if (calificablesResponse.content && calificablesResponse.content.length > 0) {
+                console.log('⭐ Primera calificable (estructura):');
+                console.log(JSON.stringify(calificablesResponse.content[0], null, 2));
+            }
+            
+            // Verificar coincidencias entre historial y calificables
+            if (response.content && response.content.length > 0) {
+                const historialIds = response.content.map(a => a.id);
+                console.log('📋 IDs del historial:', historialIds);
+                const coincidencias = historialIds.filter(id => calificablesIds.has(id));
+                console.log('✅ Coincidencias (IDs que son calificables):', coincidencias);
+            }
+            console.log('⭐ ==========================================');
+
             setAsistencias(response.content || []);
+            setAsistenciasCalificablesIds(calificablesIds);
             setTotalPages(response.totalPages || 0);
             setCurrentPage(response.number || 0);
 
@@ -185,7 +231,17 @@ const HistorialScreen = ({ navigation }) => {
 
             <FlatList
                 data={asistencias}
-                renderItem={({ item }) => <AsistenciaCard asistencia={item} navigation={navigation} />}
+                renderItem={({ item }) => {
+                    const itemId = typeof item.id === 'string' ? parseInt(item.id) : item.id;
+                    const esCalificable = asistenciasCalificablesIds.has(itemId);
+                    return (
+                        <AsistenciaCard 
+                            asistencia={item} 
+                            navigation={navigation}
+                            esCalificable={esCalificable}
+                        />
+                    );
+                }}
                 keyExtractor={(item) => item.id.toString()}
                 contentContainerStyle={styles.listContainer}
                 refreshControl={
