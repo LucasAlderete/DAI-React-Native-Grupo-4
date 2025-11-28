@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ThemeContext } from '../../context/ThemeContext';
+import NewsCarousel from './NewsCarousel';
 
 const NOTIFICATIONS_KEY = "local_notifications";
 
@@ -35,51 +36,53 @@ export default function HomeScreen({ navigation }) {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+          <NewsCarousel />
 
-      <Text style={[styles.title, { color: theme.text }]}>
-        Bienvenido a RitmoFit 🏋️‍♂️
-      </Text>
+          <Text style={[styles.title, { color: theme.text }]}>
+            Bienvenido a RitmoFit 🏋️‍♂️
+          </Text>
 
-      {hasAlerts && (
-        <Text style={{ color: "red", marginBottom: 10 }}>
-          🔔 Tenés novedades recientes
-        </Text>
-      )}
+          {hasAlerts && (
+            <Text style={{ color: "red", marginBottom: 10 }}>
+              🔔 Tenés novedades recientes
+            </Text>
+          )}
 
-      <TextInput
-        style={[
-          styles.input,
-          {
-            backgroundColor: theme.card,
-            borderColor: theme.border,
-            color: theme.text,
-          }
-        ]}
-        placeholder="Buscar clase..."
-        placeholderTextColor={theme.placeholder}
-      />
+          <TextInput
+            style={[
+              styles.input,
+              {
+                backgroundColor: theme.card,
+                borderColor: theme.border,
+                color: theme.text,
+              }
+            ]}
+            placeholder="Buscar clase..."
+            placeholderTextColor={theme.placeholder}
+          />
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('ClasesList')}
-      >
-        <Text style={styles.buttonText}>Ver Clases</Text>
-      </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate('ClasesList')}
+          >
+            <Text style={styles.buttonText}>Ver Clases</Text>
+          </TouchableOpacity>
 
-      <TouchableOpacity
-        style={[styles.button, styles.reservasButton]}
-        onPress={() => navigation.getParent()?.navigate('Reservas')}
-      >
-        <Text style={styles.buttonText}>📅 Mis Reservas</Text>
-      </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.button, styles.reservasButton]}
+            onPress={() => navigation.getParent()?.navigate('Reservas')}
+          >
+            <Text style={styles.buttonText}>📅 Mis Reservas</Text>
+          </TouchableOpacity>
 
-      <TouchableOpacity
-        style={[styles.button, styles.historialButton]}
-        onPress={() => navigation.getParent()?.navigate('Historial')}
-      >
-        <Text style={styles.buttonText}>📊 Ver Historial</Text>
-      </TouchableOpacity>
-
+          <TouchableOpacity
+            style={[styles.button, styles.historialButton]}
+            onPress={() => navigation.getParent()?.navigate('Historial')}
+          >
+            <Text style={styles.buttonText}>📊 Ver Historial</Text>
+          </TouchableOpacity>
+        </ScrollView>
     </View>
   );
 }
@@ -87,14 +90,19 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingHorizontal: 0,
+  },
+  scrollContent: {
     paddingHorizontal: 20,
+    paddingBottom: 20,
+    alignItems: 'center'
   },
   title: {
     fontSize: 26,
     fontWeight: 'bold',
     marginBottom: 40,
+    textAlign: 'center'
   },
   input: {
     width: '90%',
