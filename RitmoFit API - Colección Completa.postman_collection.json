@@ -1,0 +1,994 @@
+{
+	"info": {
+		"_postman_id": "4da28c90-9409-4121-a5da-f55de0f77a0d",
+		"name": "RitmoFit API - Colección Completa",
+		"description": "Colección completa de endpoints para la API de RitmoFit - Gimnasio",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4010863"
+	},
+	"item": [
+		{
+			"name": "1. Autenticación",
+			"item": [
+				{
+					"name": "Solicitar Código OTP",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"usuario@ejemplo.com\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/solicitar-codigo",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"solicitar-codigo"
+							]
+						},
+						"description": "Solicita un código OTP de 6 dígitos al email del usuario"
+					},
+					"response": []
+				},
+				{
+					"name": "Verificar Código OTP - Usuario Nuevo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"nuevo.usuario@ejemplo.com\",\n  \"codigo\": \"123456\",\n  \"nombre\": \"Juan Pérez\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/verificar-codigo",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"verificar-codigo"
+							]
+						},
+						"description": "Verifica el código OTP y crea un nuevo usuario"
+					},
+					"response": []
+				},
+				{
+					"name": "Verificar Código OTP - Usuario Existente",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"usuario@ejemplo.com\",\n  \"codigo\": \"123456\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/verificar-codigo",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"verificar-codigo"
+							]
+						},
+						"description": "Verifica el código OTP para un usuario existente"
+					},
+					"response": []
+				},
+				{
+					"name": "Reenviar Código OTP",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"usuario@ejemplo.com\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/reenviar-codigo",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"reenviar-codigo"
+							]
+						},
+						"description": "Reenvía un nuevo código OTP al email del usuario"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints para autenticación con OTP por email"
+		},
+		{
+			"name": "2. Perfil de Usuario",
+			"item": [
+				{
+					"name": "Obtener Perfil",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwtToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/usuario/perfil",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"usuario",
+								"perfil"
+							]
+						},
+						"description": "Obtiene el perfil del usuario autenticado"
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar Perfil",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwtToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"Juan Carlos Pérez\",\n  \"fotoUrl\": \"https://ejemplo.com/foto-perfil.jpg\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/usuario/perfil",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"usuario",
+								"perfil"
+							]
+						},
+						"description": "Actualiza el perfil del usuario autenticado"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints para gestión del perfil de usuario"
+		},
+		{
+			"name": "3. Catálogo de Clases",
+			"item": [
+				{
+					"name": "Obtener Todas las Clases",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/clases?page=0&size=10",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"clases"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						},
+						"description": "Obtiene todas las clases disponibles con paginación"
+					},
+					"response": []
+				},
+				{
+					"name": "Filtrar Clases por Sede",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/clases?sedeId=1&page=0&size=10",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"clases"
+							],
+							"query": [
+								{
+									"key": "sedeId",
+									"value": "1"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						},
+						"description": "Filtra clases por sede específica"
+					},
+					"response": []
+				},
+				{
+					"name": "Filtrar Clases por Disciplina",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/clases?disciplinaId=1&page=0&size=10",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"clases"
+							],
+							"query": [
+								{
+									"key": "disciplinaId",
+									"value": "1"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						},
+						"description": "Filtra clases por disciplina específica"
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Detalle de Clase",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/clases/{{claseId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"clases",
+								"{{claseId}}"
+							]
+						},
+						"description": "Obtiene los detalles de una clase específica"
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Disciplinas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/clases/disciplinas",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"clases",
+								"disciplinas"
+							]
+						},
+						"description": "Obtiene la lista de todas las disciplinas disponibles"
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Sedes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/clases/sedes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"clases",
+								"sedes"
+							]
+						},
+						"description": "Obtiene la lista de todas las sedes disponibles"
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Instructores",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/clases/instructores",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"clases",
+								"instructores"
+							]
+						},
+						"description": "Obtiene la lista de todos los instructores disponibles"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints para consultar el catálogo de clases"
+		},
+		{
+			"name": "4. Reservas",
+			"item": [
+				{
+					"name": "Crear Reserva",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwtToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"claseId\": 1\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/reservas",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"reservas"
+							]
+						},
+						"description": "Crea una nueva reserva para una clase"
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Mis Reservas",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwtToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/reservas?page=0&size=10",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"reservas"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						},
+						"description": "Obtiene las reservas del usuario autenticado"
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Próximas Reservas",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwtToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/reservas/proximas",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"reservas",
+								"proximas"
+							]
+						},
+						"description": "Obtiene las próximas reservas confirmadas del usuario"
+					},
+					"response": []
+				},
+				{
+					"name": "Cancelar Reserva",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwtToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/reservas/{{reservaId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"reservas",
+								"{{reservaId}}"
+							]
+						},
+						"description": "Cancela una reserva existente"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints para gestión de reservas"
+		},
+		{
+			"name": "5. Historial de Asistencias",
+			"item": [
+				{
+					"name": "Obtener Historial de Asistencias",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwtToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/asistencias/historial?page=0&size=10",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"asistencias",
+								"historial"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						},
+						"description": "Obtiene el historial de asistencias del usuario"
+					},
+					"response": []
+				},
+				{
+					"name": "Filtrar Historial por Fechas",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwtToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/asistencias/historial?fechaInicio=2024-01-01T00:00:00&fechaFin=2024-12-31T23:59:59&page=0&size=10",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"asistencias",
+								"historial"
+							],
+							"query": [
+								{
+									"key": "fechaInicio",
+									"value": "2024-01-01T00:00:00"
+								},
+								{
+									"key": "fechaFin",
+									"value": "2024-12-31T23:59:59"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						},
+						"description": "Filtra el historial de asistencias por rango de fechas"
+					},
+					"response": []
+				},
+				{
+					"name": "Registrar Asistencia",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwtToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/asistencias/registrar?claseId={{claseId}}&reservaId={{reservaId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"asistencias",
+								"registrar"
+							],
+							"query": [
+								{
+									"key": "claseId",
+									"value": "{{claseId}}"
+								},
+								{
+									"key": "reservaId",
+									"value": "{{reservaId}}"
+								}
+							]
+						},
+						"description": "Registra la asistencia de un usuario a una clase"
+					},
+					"response": []
+				},
+				{
+					"name": "Calificar Asistencia",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwtToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"calificacion\": 5,\n  \"comentario\": \"Excelente clase, muy dinámica y el instructor muy profesional\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/asistencias/1/calificar",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"asistencias",
+								"1",
+								"calificar"
+							]
+						},
+						"description": "Califica una asistencia con estrellas y comentario opcional"
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Asistencias Calificables",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwtToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/asistencias/calificables?page=0&size=10",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"asistencias",
+								"calificables"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						},
+						"description": "Obtiene las asistencias que pueden ser calificadas (últimas 24 horas)"
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints para gestión del historial de asistencias"
+		},
+		{
+			"name": "6. Flujo Completo de Prueba",
+			"item": [
+				{
+					"name": "Paso 1: Solicitar Código OTP",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"test@ritmofit.com\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/solicitar-codigo",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"solicitar-codigo"
+							]
+						},
+						"description": "Primer paso: Solicitar código OTP para el usuario de prueba"
+					},
+					"response": []
+				},
+				{
+					"name": "Paso 2: Verificar Código y Obtener Token",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"test@ritmofit.com\",\n  \"codigo\": \"123456\",\n  \"nombre\": \"Usuario Test\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/verificar-codigo",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"verificar-codigo"
+							]
+						},
+						"description": "Segundo paso: Verificar código OTP y obtener JWT token. Copiar el token a la variable jwtToken"
+					},
+					"response": []
+				},
+				{
+					"name": "Paso 3: Obtener Catálogo de Clases",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/clases?page=0&size=5",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"clases"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "5"
+								}
+							]
+						},
+						"description": "Tercer paso: Ver las clases disponibles para reservar"
+					},
+					"response": []
+				},
+				{
+					"name": "Paso 4: Crear Reserva",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwtToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"claseId\": 1\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/reservas",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"reservas"
+							]
+						},
+						"description": "Cuarto paso: Crear una reserva para la clase. Copiar el ID de la reserva a reservaId"
+					},
+					"response": []
+				},
+				{
+					"name": "Paso 5: Ver Mis Reservas",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwtToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/reservas",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"reservas"
+							]
+						},
+						"description": "Quinto paso: Verificar que la reserva se creó correctamente"
+					},
+					"response": []
+				},
+				{
+					"name": "Paso 6: Registrar Asistencia",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwtToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/asistencias/registrar?claseId=1&reservaId={{reservaId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"asistencias",
+								"registrar"
+							],
+							"query": [
+								{
+									"key": "claseId",
+									"value": "1"
+								},
+								{
+									"key": "reservaId",
+									"value": "{{reservaId}}"
+								}
+							]
+						},
+						"description": "Sexto paso: Registrar asistencia a la clase"
+					},
+					"response": []
+				},
+				{
+					"name": "Paso 7: Ver Historial de Asistencias",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwtToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/asistencias/historial",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"asistencias",
+								"historial"
+							]
+						},
+						"description": "Séptimo paso: Ver el historial de asistencias"
+					},
+					"response": []
+				},
+				{
+					"name": "Paso 8: Calificar Asistencia",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwtToken}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"calificacion\": 5,\n  \"comentario\": \"¡Excelente clase! Muy recomendable.\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/asistencias/1/calificar",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"asistencias",
+								"1",
+								"calificar"
+							]
+						},
+						"description": "Octavo paso: Calificar la asistencia con 5 estrellas"
+					},
+					"response": []
+				}
+			],
+			"description": "Secuencia de requests para probar el flujo completo de la aplicación"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Script para configurar variables automáticamente",
+					"console.log('Ejecutando pre-request script...');"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Script para extraer el JWT token automáticamente",
+					"if (pm.response.code === 200) {",
+					"    const responseJson = pm.response.json();",
+					"    if (responseJson.token) {",
+					"        pm.collectionVariables.set('jwtToken', responseJson.token);",
+					"        console.log('JWT Token guardado:', responseJson.token);",
+					"    }",
+					"    if (responseJson.id) {",
+					"        pm.collectionVariables.set('userId', responseJson.id);",
+					"        console.log('User ID guardado:', responseJson.id);",
+					"    }",
+					"    if (responseJson.reserva && responseJson.reserva.id) {",
+					"        pm.collectionVariables.set('reservaId', responseJson.reserva.id);",
+					"        console.log('Reserva ID guardado:', responseJson.reserva.id);",
+					"    }",
+					"}"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "jwtToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "userId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "claseId",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "reservaId",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
