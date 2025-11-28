@@ -26,7 +26,7 @@ const CalificarScreen = ({ route, navigation }) => {
     
     // Colores adicionales con valores por defecto
     const themeColors = {
-        ...colors,
+        ...theme,
         primary: '#2563EB',
         error: '#DC2626',
         disabled: '#9CA3AF',
@@ -37,7 +37,7 @@ const CalificarScreen = ({ route, navigation }) => {
     // Validar que tenemos la asistencia
     if (!asistencia) {
         const themeColorsError = {
-            ...colors,
+            ...theme,
             error: '#DC2626',
         };
         
