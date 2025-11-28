@@ -136,19 +136,6 @@ const CalificarScreen = ({ route, navigation }) => {
                 contentContainerStyle={styles.scrollContent}
                 keyboardShouldPersistTaps="handled"
             >
-                {/* Header */}
-                <View style={[styles.header, { borderBottomColor: themeColors.border }]}>
-                    <TouchableOpacity
-                        onPress={() => navigation.goBack()}
-                        style={styles.backButtonHeader}
-                    >
-                        <Ionicons name="arrow-back" size={24} color={themeColors.primary} />
-                    </TouchableOpacity>
-                    <Text style={[styles.title, { color: themeColors.text }]}>
-                        Calificar Clase
-                    </Text>
-                </View>
-
                 {/* Información de la clase */}
                 <View style={[styles.infoCard, { backgroundColor: themeColors.cardBackground }]}>
                     <Text style={[styles.claseNombre, { color: themeColors.text }]}>
@@ -244,20 +231,6 @@ const styles = StyleSheet.create({
     scrollContent: {
         padding: 16,
         paddingBottom: 32,
-    },
-    header: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingBottom: 16,
-        marginBottom: 24,
-        borderBottomWidth: 1,
-    },
-    backButtonHeader: {
-        marginRight: 12,
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
     },
     infoCard: {
         padding: 16,
