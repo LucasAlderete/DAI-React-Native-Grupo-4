@@ -68,10 +68,6 @@ const ClaseDetail = ({ route, navigation }) => {
     return clase.cupoMaximo - clase.cupoActual;
   };
 
-  const handleReservar = () => {
-    console.log('Reservar clase:', claseId);
-  };
-
   const openMaps = () => {
     const query = encodeURIComponent(clase.sede.direccion);
     const url = `https://www.google.com/maps/search/?api=1&query=${query}`;
@@ -153,20 +149,6 @@ const ClaseDetail = ({ route, navigation }) => {
           <Text style={styles.comoLlegarText}>🧭 Como llegar</Text>
         </TouchableOpacity>
       </View>
-
-      <TouchableOpacity
-        style={[
-          styles.reservarButton,
-          !clase.disponible && styles.reservarButtonDisabled,
-          { color: theme.background }
-        ]}
-        onPress={handleReservar}
-        disabled={!clase.disponible}
-      >
-        <Text style={styles.reservarButtonText}>
-          {clase.disponible ? 'Reservar' : 'No disponible'}
-        </Text>
-      </TouchableOpacity>
     </ScrollView>
   );
 };
