@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ThemeContext } from '../../context/ThemeContext';
 import NewsCarousel from './NewsCarousel';
@@ -90,14 +90,19 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingHorizontal: 0,
+  },
+  scrollContent: {
     paddingHorizontal: 20,
+    paddingBottom: 20,
+    alignItems: 'center'
   },
   title: {
     fontSize: 26,
     fontWeight: 'bold',
     marginBottom: 40,
+    textAlign: 'center'
   },
   input: {
     width: '90%',
