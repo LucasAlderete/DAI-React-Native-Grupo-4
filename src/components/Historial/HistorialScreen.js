@@ -30,7 +30,6 @@ const HistorialScreen = ({ navigation }) => {
     // EFECTO: Cargar datos al montar
     // ========================================
     useEffect(() => {
-        console.log('🟢 useEffect - Montaje inicial del componente');
         fetchHistorial();
         setIsInitialLoad(false);
         // Después de la carga inicial, habilitar recarga en foco
@@ -53,14 +52,10 @@ const HistorialScreen = ({ navigation }) => {
     // ========================================
     useFocusEffect(
         React.useCallback(() => {
-            console.log(`🔵 HistorialScreen recibió foco - shouldReloadOnFocus: ${shouldReloadOnFocus}`);
-            
             if (!shouldReloadOnFocus) {
-                console.log('🔵 Primera carga - NO recargar');
                 return;
             }
             
-            console.log('🔄 Recargando datos porque volvió a la pantalla...');
             fetchHistorial(true, false);
             
             // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -72,7 +67,6 @@ const HistorialScreen = ({ navigation }) => {
     // ========================================
 
     const fetchHistorial = async (resetPage = true, isRefresh = false) => {
-        console.log(`📥 fetchHistorial llamado - resetPage: ${resetPage}, isRefresh: ${isRefresh}`);
         try {
             // Solo mostrar loading completo si no es un refresh
             if (!isRefresh) {
@@ -91,33 +85,10 @@ const HistorialScreen = ({ navigation }) => {
             // Cargar historial y asistencias calificables en paralelo
             const [response, calificablesResponse] = await Promise.all([
                 getHistorialAsistencias(filtros),
-                getAsistenciasCalificables({ page: 0, size: 1000 }).catch(err => {
-                    console.warn('⚠️ Error al cargar asistencias calificables:', err);
+                getAsistenciasCalificables({ page: 0, size: 1000 }).catch(() => {
                     return { content: [] }; // Retornar estructura vacía si falla
                 })
             ]);
-
-            // 🔍 LOGGING TEMPORAL PARA DEBUGGING - Puedes comentar esto después
-            console.log('📊 ========== RESPUESTA DEL BACKEND ==========');
-            console.log('📊 Total elementos:', response.totalElements);
-            console.log('📊 Total páginas:', response.totalPages);
-            console.log('📊 Cantidad en esta página:', response.content?.length);
-
-            if (response.content && response.content.length > 0) {
-                console.log('📊 Primera asistencia (estructura completa):');
-                console.log(JSON.stringify(response.content[0], null, 2));
-
-                console.log('📊 Verificación de campos:');
-                console.log('  - fechaAsistencia:', response.content[0].fechaAsistencia);
-                console.log('  - duracionMinutos:', response.content[0].duracionMinutos);
-                console.log('  - clase:', response.content[0].clase);
-                console.log('  - clase.nombre:', response.content[0].clase?.nombre);
-                console.log('  - clase.sede:', response.content[0].clase?.sede);
-                console.log('  - clase.sede.nombre:', response.content[0].clase?.sede?.nombre);
-            } else {
-                console.log('📊 No hay asistencias en la respuesta');
-            }
-            console.log('📊 ==========================================');
 
             // Crear Set con los IDs de asistencias calificables
             // Asegurar que los IDs sean del mismo tipo (números)
@@ -126,23 +97,6 @@ const HistorialScreen = ({ navigation }) => {
                     typeof asistencia.id === 'string' ? parseInt(asistencia.id) : asistencia.id
                 )
             );
-            
-            console.log('⭐ ========== ASISTENCIAS CALIFICABLES ==========');
-            console.log('⭐ Total calificables:', calificablesIds.size);
-            console.log('⭐ IDs calificables:', Array.from(calificablesIds));
-            if (calificablesResponse.content && calificablesResponse.content.length > 0) {
-                console.log('⭐ Primera calificable (estructura):');
-                console.log(JSON.stringify(calificablesResponse.content[0], null, 2));
-            }
-            
-            // Verificar coincidencias entre historial y calificables
-            if (response.content && response.content.length > 0) {
-                const historialIds = response.content.map(a => a.id);
-                console.log('📋 IDs del historial:', historialIds);
-                const coincidencias = historialIds.filter(id => calificablesIds.has(id));
-                console.log('✅ Coincidencias (IDs que son calificables):', coincidencias);
-            }
-            console.log('⭐ ==========================================');
 
             setAsistencias(response.content || []);
             setAsistenciasCalificablesIds(calificablesIds);
@@ -151,7 +105,6 @@ const HistorialScreen = ({ navigation }) => {
 
         } catch (err) {
             setError('Error al cargar el historial de asistencias');
-            console.error('Error fetching historial:', err);
         } finally {
             setLoading(false);
             if (isRefresh) {

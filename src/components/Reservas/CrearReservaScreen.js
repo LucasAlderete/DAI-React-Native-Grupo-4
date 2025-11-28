@@ -34,12 +34,6 @@ export default function CrearReservaScreen({ navigation }) {
       const data = await getClases();
       const clasesData = data.content || data;
       
-      // Log para ver el formato de las fechas
-      if (clasesData.length > 0) {
-        console.log('Formato de fecha recibido:', clasesData[0].fechaInicio);
-        console.log('Primera clase completa:', JSON.stringify(clasesData[0], null, 2));
-      }
-      
       setClases(clasesData);
     } catch (error) {
       Alert.alert(
@@ -111,7 +105,6 @@ export default function CrearReservaScreen({ navigation }) {
       
       // Verificar si la fecha es válida
       if (isNaN(fecha.getTime())) {
-        console.warn('Fecha inválida:', fechaString);
         return 'Fecha no disponible';
       }
       
@@ -125,7 +118,6 @@ export default function CrearReservaScreen({ navigation }) {
       };
       return fecha.toLocaleDateString('es-AR', opciones);
     } catch (error) {
-      console.error('Error al formatear fecha:', error, fechaString);
       return 'Fecha no disponible';
     }
   };

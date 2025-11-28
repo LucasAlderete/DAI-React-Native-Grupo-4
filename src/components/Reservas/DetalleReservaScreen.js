@@ -44,7 +44,7 @@ export default function DetalleReservaScreen({ navigation, route }) {
       const res = await reservasService.getReservaByClase(claseId);
       setReservaState(res);
     } catch (e) {
-      console.log("Error cargando reserva:", e);
+      // Error al cargar reserva
     }
   }
 

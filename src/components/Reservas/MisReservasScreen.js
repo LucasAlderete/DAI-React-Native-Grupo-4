@@ -32,12 +32,6 @@ export default function MisReservasScreen({ navigation }) {
       const data = await reservasService.getMisReservas(pageNum, 10);
       const reservasData = data.content || data;
       
-      // Log para ver el formato de las fechas
-      if (reservasData.length > 0 && pageNum === 0) {
-        console.log('Primera reserva completa:', JSON.stringify(reservasData[0], null, 2));
-        console.log('Fecha de la clase:', reservasData[0]?.clase?.fechaInicio);
-      }
-      
       if (pageNum === 0) {
         setReservas(reservasData);
       } else {
@@ -82,7 +76,6 @@ export default function MisReservasScreen({ navigation }) {
       
       // Verificar si la fecha es válida
       if (isNaN(fecha.getTime())) {
-        console.warn('Fecha inválida:', fechaString);
         return 'Fecha no disponible';
       }
       
@@ -96,7 +89,6 @@ export default function MisReservasScreen({ navigation }) {
       };
       return fecha.toLocaleDateString('es-AR', opciones);
     } catch (error) {
-      console.error('Error al formatear fecha:', error, fechaString);
       return 'Fecha no disponible';
     }
   };

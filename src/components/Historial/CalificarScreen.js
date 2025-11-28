@@ -85,8 +85,7 @@ const CalificarScreen = ({ route, navigation }) => {
                     {
                         text: 'OK',
                         onPress: () => {
-                            console.log('✅ Calificación guardada - Volviendo al historial...');
-                            // Volver al historial (esto debería activar useFocusEffect)
+                            // Volver al historial y refrescar
                             navigation.goBack();
                         },
                     },
