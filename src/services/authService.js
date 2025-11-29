@@ -52,18 +52,12 @@ export const authService = {
   },
 
   async resendOtp(email) {
-    const url = "http://192.168.0.93:8080/api/auth/enviar-otp";
-
-    console.log("Enviando OTP a:", url);
-
-    const resp = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
-    });
-
-    const data = await resp.json();
-    return data;
+    try {
+      const { data } = await apiService.sendOtpWithoutPassword({ email });
+      return data;
+    } catch (err) {
+      throw err;
+    }
   },
 
   async register(nombre, email, password) {
